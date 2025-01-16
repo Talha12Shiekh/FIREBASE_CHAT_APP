@@ -1,15 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const Home = () => {
+const SignUp = () => {
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text>SignUp</Text>
     </View>
   )
 }
 
-export default Home
+export default SignUp
 
 const styles = StyleSheet.create({
   container: { flex: 1 }
