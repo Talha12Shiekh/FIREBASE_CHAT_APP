@@ -8,11 +8,11 @@ import SignUp from './Screens/SignUp';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
-  Home:undefined,
-  SignUp:undefined,
+  Home: undefined,
+  SignUp: undefined,
 };
 
-type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<RootStackParamList,"Home","SignUp">;
+type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<RootStackParamList, "Home", "SignUp">;
 
 const AppContent = () => {
 
@@ -23,25 +23,25 @@ const AppContent = () => {
 
   useEffect(() => {
     if (userAuthenticated) {
-      navigation.navigate("Home")
+      navigation.navigate("Home");
     } else {
       navigation.navigate("SignUp");
     }
   }, [userAuthenticated]);
 
-  return <NavigationContainer>
-    <Stack.Navigator initialRouteName='Home'>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="SignUp" component={SignUp} />
-    </Stack.Navigator>
-  </NavigationContainer>
+  return <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
+    <Stack.Screen name="Home" component={Home} />
+    <Stack.Screen name="SignUp" component={SignUp} />
+  </Stack.Navigator>
 }
 
 const App = () => {
   return (
-    <AuthContextProvider>
-      <AppContent />
-    </AuthContextProvider>
+    <NavigationContainer>
+      <AuthContextProvider>
+        <AppContent />
+      </AuthContextProvider>
+    </NavigationContainer>
   )
 }
 

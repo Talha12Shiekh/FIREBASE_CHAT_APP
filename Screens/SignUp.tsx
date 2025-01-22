@@ -1,12 +1,30 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import ImageAndInputScreen from './ImageAndInputScreen'
 
 const SignUp = () => {
-  return (
-    <View style={styles.container}>
-      <Text>SignUp</Text>
-    </View>
-  )
+
+  const [credentials, setcredentials] = useState({
+    email: "",
+    password: "",
+  });
+
+  function handleChangeCredentials(name:string, value:string) {
+    setcredentials(p => ({
+      ...p,
+      [name]: value
+    }))
+  }
+  
+  return <ImageAndInputScreen
+  toptext="Sign Up" 
+  btntext='Sign Up'
+  handleActionofButtonClick={() => {}}
+  credentials={credentials}
+  handleChangeCredentials={handleChangeCredentials}
+  setcredentials={setcredentials}
+  topimage={""}
+  />
 }
 
 export default SignUp
