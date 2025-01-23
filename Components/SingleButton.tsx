@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { BTN_COLOR } from "../Constants";
 
 type SingleButtonProps = {
@@ -15,7 +15,7 @@ const SingleButton = ({ text, onPress }: SingleButtonProps) => <TouchableOpacity
 
 const styles = StyleSheet.create({
     singlebtn: {
-        width: "90%",
+        width: "95%",
         backgroundColor: BTN_COLOR,
         padding: wp(2.5),
         justifyContent: "center",
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     btntext: {
         fontFamily: "Poppins-Regular",
         color: "white",
-        fontSize: wp(5),
+        fontSize: wp(4),
     },
 })
 

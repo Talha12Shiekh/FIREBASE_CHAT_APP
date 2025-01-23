@@ -1,39 +1,34 @@
-import { ActivityIndicator, Animated, Image, ImageSourcePropType, Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import SingleButton  from '../Components/SingleButton'
-import BackButton from '../Components/BackButton'
-import ImagePicker from "../Components/ImagePicker";
+import { ActivityIndicator, ImageSourcePropType, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
+import SingleButton from '../Components/SingleButton'
+import BackButton from '../Components/BackButton';
 import EyeIcon from "react-native-vector-icons/Entypo";
-import { useNavigation, useRoute } from '@react-navigation/native';
+import ProfileIcon from "react-native-vector-icons/Ionicons";
+import MailIcon from "react-native-vector-icons/AntDesign";
+import LockIcon from "react-native-vector-icons/AntDesign";
 import { styles } from "../styles";
 import ImagePickerContainer from '../Components/ImagePickerContainer';
 
 interface ImageAndInputScreenPropsTypes {
-    toptext:string,
-    btntext:string,
-    handleActionofButtonClick:() => void,
-    credentials:{email:string,password:string,image?:string},
-    handleChangeCredentials:(field:string,value:string) => void,
-    setcredentials:React.Dispatch<React.SetStateAction<{
-        email:string,
-        password:string,
-        image?:string
-    }>>,
-    topimage?:ImageSourcePropType | undefined | string
+  toptext: string,
+  btntext: string,
+  handleActionofButtonClick: () => void,
+  credentials: { email: string, password: string,name: string, image?: string },
+  handleChangeCredentials: (field: string, value: string) => void,
+  setcredentials: React.Dispatch<React.SetStateAction<{
+    email: string,
+    password: string,
+    name:string,
+    image?: string
+  }>>,
+  topimage?: ImageSourcePropType | undefined | string
 }
 
-const ImageAndInputScreen = ({ toptext, btntext, handleActionofButtonClick, credentials, handleChangeCredentials, setcredentials, topimage }:ImageAndInputScreenPropsTypes) => {
+const ImageAndInputScreen = ({ toptext, btntext, handleActionofButtonClick, credentials, handleChangeCredentials, setcredentials, topimage }: ImageAndInputScreenPropsTypes) => {
 
   const [showpswrd, setshowpswrd] = useState(true);
 
   const [isKeyboardVisible, setisKeyboardVisible] = useState(false);
-
-  const navigation = useNavigation();
-
-  const route = useRoute();
-
-//   const userloading = useGetUserLoading();
 
   const { email, password } = credentials;
 
@@ -43,7 +38,8 @@ const ImageAndInputScreen = ({ toptext, btntext, handleActionofButtonClick, cred
     setcredentials({
       email: "",
       password: "",
-      image: ""
+      image: "",
+      name:""
     });
   }
 
@@ -54,7 +50,6 @@ const ImageAndInputScreen = ({ toptext, btntext, handleActionofButtonClick, cred
     <View style={styles.container}>
       <View>
         <BackButton />
-        
       </View>
       <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
@@ -66,25 +61,55 @@ const ImageAndInputScreen = ({ toptext, btntext, handleActionofButtonClick, cred
               topimage={topimage}
             />
             <Text style={styles.topheading}>{toptext}</Text>
-            <View style={[styles.inptcontainer, {justifyContent: isKeyboardVisible ? "center" : "flex-start"}]}>
-              <View style={{marginBottom:wp(8)}}>
-
-                <Text style={styles.inputplaceholder}>Email</Text>
+            <View style={[styles.inptcontainer, { justifyContent: isKeyboardVisible ? "center" : "flex-start" }]}>
+              <View style={styles.singleinput}>
+                <View style={styles.inpticoncontainer}>
+                  <ProfileIcon
+                    size={20}
+                    color="grey"
+                    name='person-outline'
+                  />
+                </View>
                 <TextInput
                   style={styles.input}
                   onChangeText={t => handleChangeCredentials("email", t)}
                   value={email}
-                  placeholder='xyz@gmail.com'
+                  placeholder='Username'
+                  placeholderTextColor={"grey"}
                 />
               </View>
-              <View style={styles.pswrdInptContainer}>
+              <View style={styles.singleinput}>
+              <View style={styles.inpticoncontainer}>
+                  <MailIcon
+                    size={20}
+                    color="grey"
+                    name='mail'
+                  />
+                </View>
+                <TextInput
+                  keyboardType="email-address"
+                  style={styles.input}
+                  onChangeText={t => handleChangeCredentials("email", t)}
+                  value={email}
+                  placeholder='Email address'
+                  placeholderTextColor={"grey"}
+                />
+              </View>
 
-                <Text style={styles.inputplaceholder}>Password</Text>
+              <View style={styles.singleinput}>
+              <View style={styles.inpticoncontainer}>
+                  <LockIcon
+                    size={25}
+                    color="grey"
+                    name='lock'
+                  />
+                </View>
                 <TextInput
                   style={styles.input}
                   secureTextEntry={showpswrd}
                   value={password}
-                  placeholder='••••••••'
+                  placeholder='Password'
+                  placeholderTextColor={"grey"}
                   onChangeText={p => handleChangeCredentials("password", p)}
                 />
                 <TouchableOpacity onPress={() => setshowpswrd(p => !p)} style={styles.eyeiconContainer}>
@@ -99,26 +124,30 @@ const ImageAndInputScreen = ({ toptext, btntext, handleActionofButtonClick, cred
                 </TouchableOpacity>
 
               </View>
-              <View style={styles.frgtpswrdcontainer}>
+
+              <View style={styles.btncontainer}>
+                {false ? <ActivityIndicator
+                  size="large"
+                  color={"green"}
+                /> : <SingleButton
+                  text={btntext}
+                  onPress={handleButtonClick}
+                />}
+              </View>
+              {/* <View style={styles.frgtpswrdcontainer}>
 
                 {route.name === "SignIn" && <View style={{ alignSelf: "flex-end", marginRight: wp(5), marginTop: wp(5) }}>
                   <TouchableOpacity onPress={() => []}>
                     <Text >Forget Password ?</Text>
                   </TouchableOpacity>
                 </View>}
-              </View>
+              </View> */}
+
             </View>
+
           </View>
 
-          <View style={styles.btncontainer}>
-            {false ? <ActivityIndicator
-              size="large"
-              color={"green"}
-            /> : <SingleButton
-              text={btntext}
-              onPress={handleButtonClick}
-            />}
-          </View>
+
         </View>
 
       </KeyboardAvoidingView>

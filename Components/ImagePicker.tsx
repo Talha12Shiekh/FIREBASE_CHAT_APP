@@ -45,8 +45,8 @@ const ImagePicker = ({ topimage }:TopImagetypes) => {
                 <View style={styles.cameraContainer}>
                     <CameraIcon
                         name="camera"
-                        size={30}
-                        color="black"
+                        size={25}
+                        color="white"
                     />
                 </View>
             </TouchableOpacity>}

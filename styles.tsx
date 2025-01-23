@@ -1,6 +1,6 @@
 import { widthPercentageToDP as wp ,heightPercentageToDP as hp} from "react-native-responsive-screen";
 import { StyleSheet } from "react-native";
-import { BG_COLOR } from "./Constants";
+import { BG_COLOR, INPUT_BG_COLOR } from "./Constants";
 
 export const styles = StyleSheet.create({
     container: {
@@ -14,8 +14,10 @@ export const styles = StyleSheet.create({
     },
     btncontainer: {
       flex: 1,
-      justifyContent: "flex-end",
-      marginBottom: wp(5)
+      justifyContent: "flex-start",
+      marginBottom: wp(5),
+      width:"100%",
+      marginVertical:wp(5)
     },
     image: {
       width: wp(80),
@@ -24,17 +26,16 @@ export const styles = StyleSheet.create({
     inptcontainer: {
       flex: 1,
       width: "100%",
+      marginVertical:wp(9)
     },
     input: {
-      width: "95%",
-      backgroundColor: "black",
-      alignSelf: "center",
-      borderRadius: 50,
-      color: "white",
-      fontSize: wp(3),
+      width:"100%", 
+      color:"grey",
+      fontSize: wp(3.5),
       paddingHorizontal: wp(4),
       fontFamily: "Poppins-Regular",
-      paddingBottom: 5,
+      paddingTop:15,
+      paddingLeft:wp(9)
     },
     inputplaceholder: {
       fontSize: wp(3.5),
@@ -45,12 +46,8 @@ export const styles = StyleSheet.create({
     topheading: {
       textAlign: "center",
       fontSize: wp(7),
-      fontFamily: "Poppins-Regular",
       color: "black",
-      fontWeight:"bold",
-    },
-    pswrdInptContainer: {
-      position: "relative",
+      fontFamily: "Poppins-Regular",
     },
     eyeiconContainer: {
       position: "absolute",
@@ -67,5 +64,24 @@ export const styles = StyleSheet.create({
     },
     frgtpswrdcontainer:{
       flex:1,
+    },
+    singleinput:{
+      marginVertical:wp(2),
+      width:"95%",
+      backgroundColor:INPUT_BG_COLOR,
+      alignSelf:"center",
+      padding:wp(1),
+      borderRadius:10,
+      position:"relative"
+    },
+    inpticoncontainer:{
+      position:"absolute",
+      left:0,
+      justifyContent:"center",
+      alignItems:"center",
+      width:"10%",
+      bottom:0,
+      top:0,
+      borderRadius:10
     }
   })
