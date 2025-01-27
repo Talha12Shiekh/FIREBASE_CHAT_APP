@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native'
 import React, { useEffect } from 'react'
 import { AuthContextProvider, useAuth } from './Context/AuthContext';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -6,10 +5,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './Screens/Home';
 import SignUp from './Screens/SignUp';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import SignIn from './Screens/SignIn';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined,
   SignUp: undefined,
+  SignIn: undefined
 };
 
 type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<RootStackParamList, "Home", "SignUp">;
@@ -32,6 +33,7 @@ const AppContent = () => {
   return <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
     <Stack.Screen name="Home" component={Home} />
     <Stack.Screen name="SignUp" component={SignUp} />
+    <Stack.Screen name="SignIn" component={SignIn} />
   </Stack.Navigator>
 }
 

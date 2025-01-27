@@ -1,6 +1,6 @@
 import { widthPercentageToDP as wp ,heightPercentageToDP as hp} from "react-native-responsive-screen";
 import { StyleSheet } from "react-native";
-import { BG_COLOR, INPUT_BG_COLOR } from "./Constants";
+import { BG_COLOR, BTN_COLOR, INPUT_BG_COLOR } from "./Constants";
 
 export const styles = StyleSheet.create({
     container: {
@@ -13,11 +13,9 @@ export const styles = StyleSheet.create({
       alignItems: "center",
     },
     btncontainer: {
-      flex: 1,
       justifyContent: "flex-start",
-      marginBottom: wp(5),
       width:"100%",
-      marginVertical:wp(5)
+      marginVertical:wp(5),
     },
     image: {
       width: wp(80),
@@ -35,7 +33,7 @@ export const styles = StyleSheet.create({
       paddingHorizontal: wp(4),
       fontFamily: "Poppins-Regular",
       paddingTop:15,
-      paddingLeft:wp(9)
+      paddingLeft:wp(12)
     },
     inputplaceholder: {
       fontSize: wp(3.5),
@@ -51,8 +49,8 @@ export const styles = StyleSheet.create({
     },
     eyeiconContainer: {
       position: "absolute",
-      right: wp(8),
-      bottom: 12,
+      right: wp(5),
+      bottom: 20,
     },
     dontworrytext:{
       fontFamily: "Poppins-Regular",
@@ -61,9 +59,6 @@ export const styles = StyleSheet.create({
       alignSelf:"center",
       textAlign:"center",
       marginVertical:wp(4)
-    },
-    frgtpswrdcontainer:{
-      flex:1,
     },
     singleinput:{
       marginVertical:wp(2),
@@ -79,9 +74,24 @@ export const styles = StyleSheet.create({
       left:0,
       justifyContent:"center",
       alignItems:"center",
-      width:"10%",
+      width:"15%",
       bottom:0,
       top:0,
       borderRadius:10
+    },
+    alrdyacnttext:{
+      color:"grey",
+      fontFamily: "Poppins-Regular",
+      textAlign:"center",
+    },
+    signintext:{
+      color:BTN_COLOR,
+      textAlign:"center",
+      fontFamily: "Poppins-Regular",
+    },
+    frgtpswrdstyles:{
+      textAlign:"right",
+      fontFamily: "Poppins-Regular",
+      color:"grey"
     }
   })

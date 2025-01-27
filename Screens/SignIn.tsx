@@ -2,19 +2,15 @@ import React, { useState } from 'react'
 import ImageAndInputScreen from './ImageAndInputScreen'
 
 interface CredentialsType {
-  name:string,
   email:string,
   password:string,
-  image?:string
 }
 
-const SignUp = () => {
+const SignIn = () => {
 
   const [credentials, setcredentials] = useState<CredentialsType>({
-    name:"",
     email: "",
     password: "",
-    image:""
   });
 
 
@@ -26,8 +22,8 @@ const SignUp = () => {
   }
   
   return <ImageAndInputScreen
-  toptext="Sign Up" 
-  btntext='Sign Up'
+  toptext="Sign In" 
+  btntext='Sign In'
   handleActionofButtonClick={() => {}}
   credentials={credentials}
   handleChangeCredentials={handleChangeCredentials}
@@ -35,4 +31,4 @@ const SignUp = () => {
   />
 }
 
-export default SignUp;
+export default SignIn;

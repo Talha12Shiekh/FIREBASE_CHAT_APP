@@ -20,7 +20,7 @@ const ImagePickerContainer = ({isKeyboardVisible,setisKeyboardVisible,topimage}:
             setisKeyboardVisible(true);
             Animated.parallel([
                 Animated.timing(imagePickerTranslateY, {
-                    toValue: -wp(50), // Move the ImagePicker up off-screen
+                    toValue: -wp(40), // Move the ImagePicker up off-screen
                     duration: 300,
                     useNativeDriver: true, // Smooth animations
                 }),
