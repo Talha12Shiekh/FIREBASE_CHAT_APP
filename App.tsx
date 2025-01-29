@@ -1,41 +1,51 @@
-import React, { useEffect } from 'react'
-import { AuthContextProvider, useAuth } from './Context/AuthContext';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, {useEffect} from 'react';
+import {AuthContextProvider, useAuth} from './Context/AuthContext';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './Screens/Home';
 import SignUp from './Screens/SignUp';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SignIn from './Screens/SignIn';
+import ForgotPassword from './Screens/ForgotPassword';
 
 export type RootStackParamList = {
-  Home: undefined,
-  SignUp: undefined,
-  SignIn: undefined
+  Home: undefined;
+  SignUp: undefined;
+  SignIn: undefined;
+  ForgotPassword: undefined;
 };
 
-type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<RootStackParamList, "Home", "SignUp">;
+type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  'Home',
+  'SignUp'
+>;
 
 const AppContent = () => {
-
   const Stack = createNativeStackNavigator<RootStackParamList>();
   const navigation = useNavigation<HomeAndSignUpScreenNavigationProps>();
 
-  const { userAuthenticated } = useAuth();
+  const {userAuthenticated} = useAuth();
 
   useEffect(() => {
     if (userAuthenticated) {
-      navigation.navigate("Home");
+      navigation.navigate('Home');
     } else {
-      navigation.navigate("SignUp");
+      navigation.navigate('SignUp');
     }
   }, [userAuthenticated]);
 
-  return <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
-    <Stack.Screen name="Home" component={Home} />
-    <Stack.Screen name="SignUp" component={SignUp} />
-    <Stack.Screen name="SignIn" component={SignIn} />
-  </Stack.Navigator>
-}
+  return (
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName="Home">
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+    </Stack.Navigator>
+  );
+};
 
 const App = () => {
   return (
@@ -44,7 +54,7 @@ const App = () => {
         <AppContent />
       </AuthContextProvider>
     </NavigationContainer>
-  )
-}
+  );
+};
 
-export default App
+export default App;
