@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "63474277737",
+    "project_id": "tk-chat-app-f3338",
+    "storage_bucket": "tk-chat-app-f3338.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63474277737:android:63e106d503d0df21d371f8",
+        "android_client_info": {
+          "package_name": "com.learning_firebase_real_time_messaging"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZm7HtXCgJ65i2lxQ8Z5SnDSEvUdu-hJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
