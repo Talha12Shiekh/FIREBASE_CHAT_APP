@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import ImageAndInputScreen from './ImageAndInputScreen';
+import auth from '@react-native-firebase/auth';
 
 interface CredentialsType {
   name: string;
@@ -9,6 +10,8 @@ interface CredentialsType {
 }
 
 const SignUp = () => {
+  const [loadinguser, setloadinguser] = useState(false);
+
   const [credentials, setcredentials] = useState<CredentialsType>({
     name: '',
     email: '',
@@ -26,14 +29,24 @@ const SignUp = () => {
     }));
   }
 
+  async function handleButtonClick() {
+    setloadinguser(true);
+    await auth().createUserWithEmailAndPassword(
+      credentials.email,
+      credentials.password,
+    );
+    setloadinguser(false);
+  }
+
   return (
     <ImageAndInputScreen
       toptext="Sign Up"
       btntext="Sign Up"
-      handleActionofButtonClick={() => {}}
+      handleActionofButtonClick={handleButtonClick}
       credentials={credentials}
       handleChangeCredentials={handleChangeCredentials}
       topimage={''}
+      btnloading={loadinguser}
     />
   );
 };

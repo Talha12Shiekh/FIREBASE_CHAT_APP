@@ -33,6 +33,7 @@ interface ImageAndInputScreenPropsTypes {
     value: string,
   ) => void;
   topimage?: ImageSourcePropType | undefined | string;
+  btnloading: boolean;
 }
 
 interface SingleInputProps extends TextInputProps {
@@ -117,6 +118,7 @@ const ImageAndInputScreen = ({
   credentials,
   handleChangeCredentials,
   topimage,
+  btnloading,
 }: ImageAndInputScreenPropsTypes) => {
   const [showpswrd, setshowpswrd] = useState(true);
 
@@ -185,7 +187,7 @@ const ImageAndInputScreen = ({
                 </View>
               )}
               <View style={styles.btncontainer}>
-                {false ? (
+                {btnloading ? (
                   <ActivityIndicator size="large" color={BTN_COLOR} />
                 ) : (
                   <SingleButton
