@@ -20,12 +20,11 @@ type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<
   'Home',
   'SignUp'
 >;
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppContent = () => {
-  const Stack = createNativeStackNavigator<RootStackParamList>();
-  const navigation = useNavigation<HomeAndSignUpScreenNavigationProps>();
-
   const {userAuthenticated} = useAuth();
+  const navigation = useNavigation<HomeAndSignUpScreenNavigationProps>();
 
   useEffect(() => {
     if (userAuthenticated) {
@@ -38,7 +37,7 @@ const AppContent = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="Home">
+      initialRouteName={'Home'}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignIn" component={SignIn} />

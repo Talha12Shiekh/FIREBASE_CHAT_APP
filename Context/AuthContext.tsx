@@ -1,7 +1,17 @@
 import {createContext, useContext, useEffect, useState} from 'react';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import auth, {
+  FirebaseAuthTypes,
+  onAuthStateChanged,
+} from '@react-native-firebase/auth';
+
 interface AuthContextProps {
   children: React.ReactNode;
+}
+
+interface PromiseResponse {
+  success: boolean;
+  message?: string;
+  data?: FirebaseAuthTypes.User | null;
 }
 
 interface ContextProviderProps {
@@ -11,10 +21,10 @@ interface ContextProviderProps {
   logout: (email: string, password: number) => Promise<void>;
   register: (
     email: string,
-    password: number,
+    password: string,
     username: string,
-    profileURL: string,
-  ) => Promise<void>;
+    profileURL: string | undefined,
+  ) => Promise<PromiseResponse>;
 }
 export const AuthContext = createContext<ContextProviderProps | null>(null);
 
@@ -48,13 +58,20 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
 
   const register = async (
     email: string,
-    password: number,
+    password: string,
     username: string,
-    profileURL: string,
+    profileURL: string | undefined,
   ) => {
     try {
-      // pending
-    } catch (error) {}
+      const response = await auth().createUserWithEmailAndPassword(
+        email,
+        password,
+      );
+
+      // return {success: true, data: response?.user};
+    } catch (error) {
+      return {success: false, message: error?.message};
+    }
   };
 
   const contextreturnvalue: ContextProviderProps = {
