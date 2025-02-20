@@ -37,7 +37,7 @@ const AppContent = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName={'Home'}>
+      initialRouteName={userAuthenticated ? 'Home' : 'SignUp'}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignIn" component={SignIn} />

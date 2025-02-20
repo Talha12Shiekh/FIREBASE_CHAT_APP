@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import ImageAndInputScreen from './ImageAndInputScreen';
-import auth from '@react-native-firebase/auth';
 import {useAuth} from '../Context/AuthContext';
 import {Alert} from 'react-native';
 
@@ -38,7 +37,11 @@ const SignUp = () => {
     try {
       setloadinguser(true);
 
-      await auth().createUserWithEmailAndPassword(email, password);
+      const response = await register(email, password, name, image);
+
+      if (!response.success) {
+        Alert.alert('Sign Up', response?.message);
+      }
 
       setloadinguser(false);
     } catch (error) {

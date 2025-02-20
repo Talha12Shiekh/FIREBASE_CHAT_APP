@@ -14,6 +14,7 @@ import CameraIcon from 'react-native-vector-icons/Entypo';
 import ImagePickerPackage from 'react-native-image-crop-picker';
 import ProfileImage from '../assets/images/profile.png';
 import {useRoute} from '@react-navigation/native';
+import {Alert} from 'react-native';
 
 type TopImagetypes = {
   topimage: ImageSourcePropType | undefined | string;
@@ -26,15 +27,46 @@ type Userimage = {
 const ImagePicker = ({topimage}: TopImagetypes) => {
   const [userimage, setuserimage] = useState<Userimage | null>(null);
 
-  function handleImagePicking() {
-    ImagePickerPackage.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      cropperCircleOverlay: true,
-    }).then(({path}) => {
-      setuserimage({uri: path});
-    });
+  async function handleImagePicking() {
+    try {
+      const image = await ImagePickerPackage.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+        cropperCircleOverlay: true,
+      });
+
+      const data = new FormData();
+
+      data.append('file', {
+        uri: image.path,
+        type: image.mime,
+        name: `upload.${image.mime.split('/')[1]}`, // Set a valid filename
+      });
+      data.append('upload_preset', 'images');
+      data.append('cloud_name', 'dtxzwfyas');
+
+      const uploadResponse = await fetch(
+        'https://api.cloudinary.com/v1_1/dtxzwfyas/image/upload',
+        {
+          method: 'POST',
+          body: data,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data', // Ensure correct headers
+          },
+        },
+      );
+
+      const result = await uploadResponse.json();
+      if (result.secure_url) {
+        setuserimage({uri: result.secure_url});
+      } else {
+        Alert.alert('Upload Failed', 'Something went wrong while uploading.');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const route = useRoute();

@@ -14,17 +14,21 @@ import topimage from '../assets/images/FORGOT-PSWRD-IMG.jpg';
 import SingleButton from '../Components/SingleButton';
 import {SingleInput} from './ImageAndInputScreen';
 import ForgotPasswordIcon from 'react-native-vector-icons/MaterialIcons';
+import {useAuth} from '../Context/AuthContext';
 
 const ForgotPassword = () => {
   const [isKeyboardVisible, setisKeyboardVisible] = useState(false);
   const [email, setemail] = useState('');
 
+  const {forgotpassword} = useAuth();
+
   const [loading, setloading] = useState(false);
 
   async function handleButtonClick() {
-    setloading(true);
     if (email) {
       try {
+        setloading(true);
+        await forgotpassword(email);
         setloading(false);
         ToastAndroid.show('Email sent !', ToastAndroid.SHORT);
       } catch (error) {
@@ -65,6 +69,7 @@ const ForgotPassword = () => {
                   }
                   onChangeText={e => setemail(e)}
                   value={email}
+                  keyboardType="email-address"
                   placeholder={'xyz@gmail.com'}
                 />
                 <Text style={styles.dontworrytext}>

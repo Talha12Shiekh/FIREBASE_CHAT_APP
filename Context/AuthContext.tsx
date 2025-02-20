@@ -1,24 +1,27 @@
 import {createContext, useContext, useEffect, useState} from 'react';
-import auth, {
-  FirebaseAuthTypes,
-  onAuthStateChanged,
-} from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 interface AuthContextProps {
   children: React.ReactNode;
 }
 
-interface PromiseResponse {
+interface PromiseSuccessResponse {
   success: boolean;
-  message?: string;
   data?: FirebaseAuthTypes.User | null;
 }
+interface PromiseRejectResponse {
+  success: boolean;
+  message?: string;
+}
+
+type PromiseResponse = PromiseSuccessResponse | PromiseRejectResponse;
 
 interface ContextProviderProps {
   user: FirebaseAuthTypes.User | null;
   userAuthenticated: boolean;
-  login: (email: string, password: number) => Promise<void>;
-  logout: (email: string, password: number) => Promise<void>;
+  login: (email: string, password: string) => Promise<PromiseResponse>;
+  logout: () => Promise<PromiseResponse>;
+  forgotpassword: (email: string) => Promise<PromiseResponse>;
   register: (
     email: string,
     password: string,
@@ -33,27 +36,53 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
   const [userAuthenticated, setuserAuthenticated] = useState(false);
 
   useEffect(() => {
-    auth().onAuthStateChanged(usr => {
+    const unsubscribe = auth().onAuthStateChanged(usr => {
       if (usr) {
-        setuserAuthenticated(true);
         setuser(usr);
+        setuserAuthenticated(true);
       } else {
-        setuserAuthenticated(false);
         setuser(null);
+        setuserAuthenticated(false);
       }
     });
+
+    return unsubscribe;
   }, []);
 
-  const login = async (email: string, password: number) => {
+  const login = async (email: string, password: string) => {
     try {
-      // pending
-    } catch (error) {}
+      const response = await auth().signInWithEmailAndPassword(email, password);
+
+      return {success: true, data: response?.user};
+    } catch (error) {
+      console.log(error);
+      if (!(error instanceof Error)) return {success: false};
+      let message = error.message;
+      if (message.includes('auth/invalid-credential'))
+        message = 'Invalid Credentials!';
+      else message = 'An unexpected error occurred. Please try again.';
+      return {
+        success: false,
+        message,
+      };
+    }
   };
 
-  const logout = async (email: string, password: number) => {
+  const logout = async () => {
     try {
-      // pending
-    } catch (error) {}
+      await auth().signOut();
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      if (!(error instanceof Error)) return {success: false};
+      let message = error.message;
+      return {
+        success: false,
+        message,
+      };
+    }
   };
 
   const register = async (
@@ -68,9 +97,38 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
         password,
       );
 
-      // return {success: true, data: response?.user};
+      return {success: true, data: response?.user};
     } catch (error) {
-      return {success: false, message: error?.message};
+      if (!(error instanceof Error)) return {success: false};
+      let message = error.message;
+
+      if (message.includes('auth/email-already-in-use'))
+        message = 'Email is already in use';
+      else if (message.includes('auth/invalid-email'))
+        message = 'Invalid Email!';
+      else if (message.includes('auth/weak-password'))
+        message = 'The password is weak.';
+      else message = 'An unexpected error occurred. Please try again.';
+
+      return {
+        success: false,
+        message,
+      };
+    }
+  };
+
+  const forgotpassword = async (email: string) => {
+    try {
+      await auth().sendPasswordResetEmail(email);
+
+      return {success: true};
+    } catch (error) {
+      if (!(error instanceof Error)) return {success: false};
+      let message = error.message;
+      return {
+        success: false,
+        message,
+      };
     }
   };
 
@@ -80,6 +138,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     login,
     logout,
     register,
+    forgotpassword,
   };
 
   return (
