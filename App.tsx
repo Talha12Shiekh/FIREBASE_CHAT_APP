@@ -7,6 +7,7 @@ import SignUp from './Screens/SignUp';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SignIn from './Screens/SignIn';
 import ForgotPassword from './Screens/ForgotPassword';
+import {MenuProvider} from 'react-native-popup-menu';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -48,11 +49,13 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <AuthContextProvider>
-        <AppContent />
-      </AuthContextProvider>
-    </NavigationContainer>
+    <MenuProvider>
+      <NavigationContainer>
+        <AuthContextProvider>
+          <AppContent />
+        </AuthContextProvider>
+      </NavigationContainer>
+    </MenuProvider>
   );
 };
 

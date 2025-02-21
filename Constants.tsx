@@ -1,6 +1,7 @@
 export const BG_COLOR = 'white';
 export const BTN_COLOR = '#4c4dc7';
 export const INPUT_BG_COLOR = '#f3f3f3';
+export const TOP_BAR_COLOR = '#7480f0';
 
 export const CLOUD_NAME = 'dtxzwfyas';
 export const CLOUD_UPLOAD_PRESET = 'images';

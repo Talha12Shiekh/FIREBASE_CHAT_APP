@@ -14,6 +14,9 @@ interface PromiseRejectResponse {
   message?: string;
 }
 
+// nothing123@gmail.com
+// nothing123
+
 type PromiseResponse = PromiseSuccessResponse | PromiseRejectResponse;
 
 interface ContextProviderProps {
@@ -29,6 +32,7 @@ interface ContextProviderProps {
     profileURL: string | undefined,
   ) => Promise<PromiseResponse>;
 }
+
 export const AuthContext = createContext<ContextProviderProps | null>(null);
 
 export const AuthContextProvider = ({children}: AuthContextProps) => {
