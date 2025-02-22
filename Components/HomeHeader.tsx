@@ -1,5 +1,5 @@
 import {ImageBackground, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {TOP_BAR_COLOR} from '../Constants';
 import {
@@ -11,6 +11,11 @@ import {
 import ProfileIcon from 'react-native-vector-icons/Feather';
 import LogoutIcon from 'react-native-vector-icons/AntDesign';
 import {useAuth} from '../Context/AuthContext';
+import ProfileImage from '../assets/images/profile.png';
+
+// Shair
+// Shair123@gmail.com
+// Shair123
 
 export const Divider = () => {
   return <View style={styles.divider} />;
@@ -34,27 +39,32 @@ export const MenuItem = ({text, icon, onSelect}: MenuItemProps) => {
 };
 
 const HomeHeader = () => {
-  const {logout} = useAuth();
+  const {logout, updateProfile, user} = useAuth();
 
   async function handleLogout() {
     await logout();
   }
+
+  useEffect(() => {
+    updateProfile();
+  }, []);
+
+  let profileimage = ProfileImage;
+  if (user?.photoURL) profileimage = {uri: user?.photoURL};
+  else profileimage = ProfileImage;
 
   return (
     <View style={styles.topHeader}>
       <View>
         <Text style={styles.lefttext}>Chats</Text>
       </View>
-
       <Menu>
         <MenuTrigger>
           <View>
             <ImageBackground
-              source={{
-                uri: 'https://lh3.googleusercontent.com/ogw/AF2bZyjgB91ELP7yyhHM_AlDZMXQ2xFy_2xbXEoVqsT5LkW8xg=s32-c-mo',
-              }}
+              source={profileimage}
               resizeMode="cover"
-              style={styles.profilecontainer}
+              style={[styles.profilecontainer]}
             />
           </View>
         </MenuTrigger>

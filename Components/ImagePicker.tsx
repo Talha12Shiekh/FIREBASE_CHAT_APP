@@ -15,6 +15,7 @@ import ImagePickerPackage from 'react-native-image-crop-picker';
 import ProfileImage from '../assets/images/profile.png';
 import {useRoute} from '@react-navigation/native';
 import {Alert} from 'react-native';
+import {useAuth} from '../Context/AuthContext';
 
 type TopImagetypes = {
   topimage: ImageSourcePropType | undefined | string;
@@ -26,6 +27,7 @@ type Userimage = {
 
 const ImagePicker = ({topimage}: TopImagetypes) => {
   const [userimage, setuserimage] = useState<Userimage | null>(null);
+  const {setuserimageandname} = useAuth();
 
   async function handleImagePicking() {
     try {
@@ -61,6 +63,7 @@ const ImagePicker = ({topimage}: TopImagetypes) => {
       const result = await uploadResponse.json();
       if (result.secure_url) {
         setuserimage({uri: result.secure_url});
+        setuserimageandname(p => ({...p, image: result.secure_url}));
       } else {
         Alert.alert('Upload Failed', 'Something went wrong while uploading.');
       }

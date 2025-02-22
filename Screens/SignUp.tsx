@@ -7,21 +7,19 @@ interface CredentialsType {
   name: string;
   email: string;
   password: string;
-  image?: string;
 }
 
 const SignUp = () => {
   const [loadinguser, setloadinguser] = useState(false);
-  const {register} = useAuth();
+  const {register, setuserimageandname} = useAuth();
 
   const [credentials, setcredentials] = useState<CredentialsType>({
     name: '',
     email: '',
     password: '',
-    image: '',
   });
 
-  const {name, email, password, image} = credentials;
+  const {name, email, password} = credentials;
 
   function handleChangeCredentials(
     name: keyof typeof credentials,
@@ -36,8 +34,9 @@ const SignUp = () => {
   async function handleButtonClick() {
     try {
       setloadinguser(true);
+      setuserimageandname(p => ({...p, name: name}));
 
-      const response = await register(email, password, name, image);
+      const response = await register(email, password);
 
       if (!response.success) {
         Alert.alert('Sign Up', response?.message);
