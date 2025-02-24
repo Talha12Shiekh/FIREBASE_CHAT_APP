@@ -9,12 +9,16 @@ import {
 import React from 'react';
 import {CHAT_HEIGHT, TAB_PRESS_ACTIVE_WHITE_COLOR} from '../Constants';
 import ProfileImage from '../assets/images/profile.png';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
+import {UserDataType} from '../Screens/Home';
 
-function initTitle() {
+function initTitle(name: string) {
   return (
     <Text style={styles.title}>
-      {/* {name?.length > 18 ? name.slice(0, 19) : name} */}
+      {name?.length > 18 ? name.slice(0, 19) : name}
       Name
     </Text>
   );
@@ -36,7 +40,14 @@ function initDescription() {
   );
 }
 
-const ChatItem = ({noBorder, item, index}) => {
+interface ChatItemProps {
+  noBorder: boolean;
+  item: UserDataType;
+  index: number;
+}
+
+const ChatItem = ({noBorder, item, index}: ChatItemProps) => {
+  const {username, userimage, userId} = item;
   return (
     <>
       <TouchableNativeFeedback
@@ -48,18 +59,30 @@ const ChatItem = ({noBorder, item, index}) => {
             {
               height: CHAT_HEIGHT,
               borderBottomWidth: noBorder ? 0 : 0.5,
+              paddingLeft: wp(4),
             },
           ]}>
           <TouchableOpacity onPress={() => {}}>
-            <View>
+            <View
+              style={{
+                height: hp(5.5),
+                aspectRatio: 1,
+                borderRadius: 50,
+                marginRight: wp(3),
+                overflow: 'hidden',
+              }}>
               <Image
-                source={ProfileImage}
+                source={item.userimage ? {uri: item.userimage} : ProfileImage}
+                resizeMode="cover"
                 style={{
-                  height: wp(18),
-                  aspectRatio: 1,
-                  borderRadius: 50,
+                  width: '100%',
+                  height: '100%',
+                  transform: [
+                    {
+                      scale: item.userimage == '' ? 1.5 : 1,
+                    },
+                  ],
                 }}
-                resizeMode="contain"
               />
             </View>
           </TouchableOpacity>
@@ -69,7 +92,7 @@ const ChatItem = ({noBorder, item, index}) => {
               {alignItems: 'center', marginTop: wp(1)},
             ]}>
             <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={styles.titleContainer}>{initTitle()}</View>
+              <View style={styles.titleContainer}>{initTitle(username)}</View>
               <View style={styles.timeContainer}>{initTime()}</View>
             </View>
             <View style={{flex: 1, marginTop: wp(2), flexDirection: 'row'}}>

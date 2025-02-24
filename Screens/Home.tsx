@@ -6,19 +6,31 @@ import {TOP_BAR_COLOR} from '../Constants';
 import {useAuth} from '../Context/AuthContext';
 import firestore from '@react-native-firebase/firestore';
 
+export interface UserDataType {
+  username: string;
+  userimage: string;
+  userId: string;
+}
+
 const Home = () => {
-  const [users, setusers] = useState([1, 2, 3]);
+  const [users, setusers] = useState<UserDataType[]>([]);
 
   const {user} = useAuth();
 
   async function getUsers() {
+    let userdata: UserDataType[] = [];
     // getting all the users that are logged in instead of the current user
-    let data = await firestore()
+    const querysnapshot = await firestore()
       .collection('Users')
       .where('userId', '!=', user?.uid)
       .get();
 
-    console.log(data);
+    querysnapshot.forEach(q => {
+      let data = q.data() as UserDataType;
+      userdata.push({...data});
+    });
+
+    setusers(userdata);
   }
 
   useEffect(() => {
