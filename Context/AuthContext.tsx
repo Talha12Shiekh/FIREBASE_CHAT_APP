@@ -1,5 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -16,6 +17,8 @@ interface PromiseRejectResponse {
 
 // tkshk123@gmail.com
 // tkshk123
+
+//! PENDING IMAGE PICKER FIX IN SIGN UP SCREEN AND ALSO SHOW LOADING IMAGE WHEN THE USER PICKED THE IMAGE
 
 type PromiseResponse = PromiseSuccessResponse | PromiseRejectResponse;
 
@@ -101,6 +104,14 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
         email,
         password,
       );
+
+      const {name, image} = userimageandname;
+
+      await firestore().collection('Users').add({
+        username: name,
+        userimage: image,
+        userId: response?.user.uid,
+      });
 
       return {success: true, data: response?.user};
     } catch (error) {
