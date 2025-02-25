@@ -9,6 +9,9 @@ interface CredentialsType {
   password: string;
 }
 
+// tkkh123@gmail.com
+// tkh123
+
 const SignUp = () => {
   const [loadinguser, setloadinguser] = useState(false);
   const {register, setuserimageandname} = useAuth();

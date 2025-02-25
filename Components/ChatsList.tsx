@@ -2,6 +2,9 @@ import {FlatList, Text, View} from 'react-native';
 import React from 'react';
 import ChatItem from './ChatItem';
 import {UserDataType} from '../Screens/Home';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../App';
 
 interface ChatsListProps {
   users: UserDataType[];
@@ -10,7 +13,14 @@ interface ChatsListProps {
 // Talha3@gmail.com
 // Talha3
 
+export type ChatRoomNavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  'ChatRoom'
+>;
+
 const ChatsList = ({users}: ChatsListProps) => {
+  const navigation = useNavigation<ChatRoomNavigationProps>();
+
   return (
     <View style={{flex: 1}}>
       <FlatList
@@ -21,7 +31,7 @@ const ChatsList = ({users}: ChatsListProps) => {
           <ChatItem
             noBorder={index + 1 == users.length}
             item={item}
-            index={index}
+            navigation={navigation}
           />
         )}
       />

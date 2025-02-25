@@ -1,19 +1,25 @@
 import React, {useEffect} from 'react';
 import {AuthContextProvider, useAuth} from './Context/AuthContext';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Home from './Screens/Home';
+import Home, {UserDataType} from './Screens/Home';
 import SignUp from './Screens/SignUp';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SignIn from './Screens/SignIn';
 import ForgotPassword from './Screens/ForgotPassword';
 import {MenuProvider} from 'react-native-popup-menu';
+import ChatRoom from './Screens/ChatRoom';
 
 export type RootStackParamList = {
   Home: undefined;
   SignUp: undefined;
   SignIn: undefined;
   ForgotPassword: undefined;
+  ChatRoom: {item: UserDataType};
 };
 
 type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<
@@ -43,6 +49,7 @@ const AppContent = () => {
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="ChatRoom" component={ChatRoom} />
     </Stack.Navigator>
   );
 };

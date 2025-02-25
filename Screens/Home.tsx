@@ -19,7 +19,9 @@ const Home = () => {
 
   async function getUsers() {
     let userdata: UserDataType[] = [];
+
     // getting all the users that are logged in instead of the current user
+
     const querysnapshot = await firestore()
       .collection('Users')
       .where('userId', '!=', user?.uid)

@@ -14,6 +14,8 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {UserDataType} from '../Screens/Home';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {ChatRoomNavigationProps} from './ChatsList';
 
 function initTitle(name: string) {
   return (
@@ -43,15 +45,15 @@ function initDescription() {
 interface ChatItemProps {
   noBorder: boolean;
   item: UserDataType;
-  index: number;
+  navigation: ChatRoomNavigationProps;
 }
 
-const ChatItem = ({noBorder, item, index}: ChatItemProps) => {
-  const {username, userimage, userId} = item;
+const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
+  const {username, userimage} = item;
   return (
     <>
       <TouchableNativeFeedback
-        onPress={() => {}}
+        onPress={() => navigation.navigate('ChatRoom', {item})}
         background={TouchableNativeFeedback.Ripple('rgba(0,0,0,.1)', false)}>
         <View
           style={[
@@ -72,14 +74,14 @@ const ChatItem = ({noBorder, item, index}: ChatItemProps) => {
                 overflow: 'hidden',
               }}>
               <Image
-                source={item.userimage ? {uri: item.userimage} : ProfileImage}
+                source={userimage ? {uri: userimage} : ProfileImage}
                 resizeMode="cover"
                 style={{
                   width: '100%',
                   height: '100%',
                   transform: [
                     {
-                      scale: item.userimage == '' ? 1.5 : 1,
+                      scale: userimage == '' ? 1.5 : 1,
                     },
                   ],
                 }}
