@@ -1,8 +1,9 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {MessageType} from './SendMessageInput';
 
-const MessagesPortion = () => {
+const MessagesPortion = ({messages}: {messages: MessageType[]}) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{padding: wp(4)}}>

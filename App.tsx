@@ -22,6 +22,10 @@ export type RootStackParamList = {
   ChatRoom: {item: UserDataType};
 };
 
+// Talha shiekh
+// tk.shiekh4567@gmail.com
+// Talhashiekh_5
+
 type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<
   RootStackParamList,
   'Home',

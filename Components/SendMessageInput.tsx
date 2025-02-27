@@ -13,6 +13,14 @@ import {useAuth} from '../Context/AuthContext';
 import firestore, {Timestamp} from '@react-native-firebase/firestore';
 import {UserDataType} from '../Screens/Home';
 
+export interface MessageType {
+  userId: string;
+  text: string;
+  profileURL: string;
+  senderName: string;
+  createdAt: string;
+}
+
 const SendMessageInput = ({currentuser}: {currentuser: UserDataType}) => {
   const [singlemessage, setsinglemessage] = useState('');
 

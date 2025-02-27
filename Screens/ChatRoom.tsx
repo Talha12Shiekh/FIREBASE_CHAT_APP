@@ -5,7 +5,7 @@ import {RootStackParamList} from '../App';
 import {RouteProp} from '@react-navigation/native';
 import ChatRoomTopBar from '../Components/ChatRoomTopBar';
 import MessagesPortion from '../Components/MessagesPortion';
-import SendMessageInput from '../Components/SendMessageInput';
+import SendMessageInput, {MessageType} from '../Components/SendMessageInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {useAuth} from '../Context/AuthContext';
@@ -17,7 +17,7 @@ import firestore, {Timestamp} from '@react-native-firebase/firestore';
 type ChatRoomProps = RouteProp<RootStackParamList, 'ChatRoom'>;
 
 const ChatRoom = ({route}: {route: ChatRoomProps}) => {
-  const [messages, setmessages] = useState([]);
+  const [messages, setmessages] = useState<MessageType[]>([]);
 
   const {item} = route.params; // user whose chat is clicked
 
@@ -25,6 +25,25 @@ const ChatRoom = ({route}: {route: ChatRoomProps}) => {
 
   useEffect(() => {
     createChatRoomIfNotExists();
+
+    async function getMessages() {
+      let roomId = getRoomId(user?.uid, item?.userId);
+      let docRef = firestore().collection('Rooms').doc(roomId);
+      let messagesRef = docRef.collection('Messages');
+
+      const snapshot = await messagesRef.orderBy('createdAt', 'asc').get(); // sorting the messgages in ascending order
+
+      let messagesData: MessageType[] = [];
+
+      snapshot.forEach(s => {
+        let data = s.data() as MessageType;
+        messagesData.push({...data});
+      });
+
+      setmessages(messagesData);
+    }
+
+    getMessages();
   }, []);
 
   async function createChatRoomIfNotExists() {
@@ -47,7 +66,7 @@ const ChatRoom = ({route}: {route: ChatRoomProps}) => {
   return (
     <View style={{flex: 1}}>
       <ChatRoomTopBar item={item} />
-      <MessagesPortion />
+      <MessagesPortion messages={messages} />
       <View
         style={{
           alignItems: 'flex-end',
