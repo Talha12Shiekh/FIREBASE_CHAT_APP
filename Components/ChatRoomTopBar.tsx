@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.3,
   },
   profileimage: {
-    width: wp(10),
+    width: wp(9),
     aspectRatio: 1,
     backgroundColor: 'white',
   },

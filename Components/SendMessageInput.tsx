@@ -1,23 +1,62 @@
-import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import React from 'react';
 import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+  Alert,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import SendIcon from 'react-native-vector-icons/Feather';
+import {getRoomId} from '../Constants';
+import {useAuth} from '../Context/AuthContext';
+import firestore, {Timestamp} from '@react-native-firebase/firestore';
+import {UserDataType} from '../Screens/Home';
 
-const SendMessageInput = () => {
+const SendMessageInput = ({currentuser}: {currentuser: UserDataType}) => {
+  const [singlemessage, setsinglemessage] = useState('');
+
+  const {user} = useAuth();
+
+  async function handleSendMessage() {
+    let message = singlemessage.trim();
+
+    if (message.length > 0) {
+      try {
+        let roomId = getRoomId(user?.uid, currentuser.userId);
+        const docRef = firestore().collection('Rooms').doc(roomId);
+        const messagesRef = docRef.collection('Messages');
+
+        setsinglemessage('');
+
+        await messagesRef.add({
+          userId: currentuser?.userId,
+          text: singlemessage,
+          profileURL: currentuser?.userimage,
+          senderName: currentuser?.username,
+          createdAt: Timestamp.fromDate(new Date()),
+        });
+      } catch (error) {
+        Alert.alert('Error', error.message);
+      }
+    } else {
+      Alert.alert('Alert !', 'You can not send an empty message');
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.inptcontainer}>
         <TextInput
+          onChangeText={text => setsinglemessage(text)}
+          value={singlemessage}
           placeholderTextColor="grey"
           placeholder="Type Message..."
           multiline
           style={styles.input}
         />
         <View style={styles.sendiconcontainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleSendMessage}>
             <View style={styles.sendicon}>
               <SendIcon name="send" color="grey" size={20} />
             </View>
@@ -36,7 +75,6 @@ const styles = StyleSheet.create({
   },
   inptcontainer: {
     width: '100%',
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: wp(3),
@@ -52,6 +90,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'grey',
     paddingTop: wp(3),
+    paddingRight: wp(5),
   },
   sendiconcontainer: {
     position: 'absolute',
