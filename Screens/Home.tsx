@@ -42,10 +42,6 @@ const Home = () => {
     }
   }, []);
 
-  if (users.length == 0) {
-    return <EmptyChatsScreen />;
-  }
-
   return (
     <View style={styles.container}>
       <HomeHeader />

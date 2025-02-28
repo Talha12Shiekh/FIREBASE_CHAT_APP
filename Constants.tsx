@@ -6,6 +6,7 @@ export const TAB_PRESS_ACTIVE_WHITE_COLOR = '#4d565d';
 export const CHAT_BACKROUND_COLOR = '#fff';
 export const CHAT_HEIGHT = 90;
 export const TITLE_COLOR = 'white';
+export const MESSAGE_BLUE_COLOR = '#00ffff38';
 
 export const getRoomId = (user1: string | undefined, user2: string) => {
   const sortedids = [user1, user2].sort(); // sorting the ids first

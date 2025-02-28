@@ -37,11 +37,13 @@ const SendMessageInput = ({currentuser}: {currentuser: UserDataType}) => {
 
         setsinglemessage('');
 
+        // when we are sending the message we should send the information of sender ( who is sending the message )
+
         await messagesRef.add({
-          userId: currentuser?.userId,
+          userId: user?.uid,
           text: singlemessage,
-          profileURL: currentuser?.userimage,
-          senderName: currentuser?.username,
+          profileURL: user?.photoURL,
+          senderName: user?.displayName,
           createdAt: Timestamp.fromDate(new Date()),
         });
       } catch (error) {

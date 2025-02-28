@@ -74,7 +74,7 @@ const ChatRoom = ({route}: {route: ChatRoomProps}) => {
           flexDirection: 'row',
           paddingBottom: wp(3),
         }}>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
           <View>
             <SendMessageInput currentuser={item} />
           </View>
