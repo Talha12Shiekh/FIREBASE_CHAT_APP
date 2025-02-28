@@ -17,8 +17,12 @@ import {UserDataType} from '../Screens/Home';
 import {ChatRoomNavigationProps} from './ChatsList';
 
 function initTitle(name: string) {
-  console.log(name);
-  return <Text style={styles.title}>{name}</Text>;
+  return (
+    <Text style={styles.title}>
+      {' '}
+      {name?.length > 18 ? name.slice(0, 19) : name}
+    </Text>
+  );
 }
 
 function initTime() {
