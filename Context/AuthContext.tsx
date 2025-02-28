@@ -28,13 +28,12 @@ interface ContextProviderProps {
   login: (email: string, password: string) => Promise<PromiseResponse>;
   logout: () => Promise<PromiseResponse>;
   forgotpassword: (email: string) => Promise<PromiseResponse>;
-  register: (email: string, password: string) => Promise<PromiseResponse>;
-  setuserimageandname: React.Dispatch<
-    React.SetStateAction<{
-      name: string;
-      image: string;
-    }>
-  >;
+  register: (
+    email: string,
+    password: string,
+    name: string,
+  ) => Promise<PromiseResponse>;
+  setimageofuser: React.Dispatch<React.SetStateAction<string>>;
   updateProfile: () => void;
 }
 
@@ -43,10 +42,8 @@ export const AuthContext = createContext<ContextProviderProps | null>(null);
 export const AuthContextProvider = ({children}: AuthContextProps) => {
   const [user, setuser] = useState<FirebaseAuthTypes.User | null>(null);
   const [userAuthenticated, setuserAuthenticated] = useState(false);
-  const [userimageandname, setuserimageandname] = useState({
-    name: '',
-    image: '',
-  });
+  const [imageofuser, setimageofuser] = useState('');
+  const [loggedusername, setloggedusername] = useState('');
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(usr => {
@@ -98,18 +95,18 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     }
   };
 
-  const register = async (email: string, password: string) => {
+  const register = async (email: string, password: string, name: string) => {
+    setloggedusername(name);
+    console.log('Credentials', email, password, name);
     try {
       const response = await auth().createUserWithEmailAndPassword(
         email,
         password,
       );
 
-      const {name, image} = userimageandname;
-
       await firestore().collection('Users').add({
         username: name,
-        userimage: image,
+        userimage: imageofuser,
         userId: response?.user.uid,
       });
 
@@ -150,20 +147,20 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
 
   const updateProfile = async () => {
     const user = auth().currentUser;
-    const {name, image} = userimageandname;
+    const profileimage = imageofuser;
 
     if (user) {
       // checking first that the user exists or not because the updateProfile function will not work if the user does not exists
       try {
         await user.updateProfile({
-          displayName: name,
-          photoURL: image,
+          displayName: loggedusername,
+          photoURL: profileimage,
         });
 
         const updateduser = auth().currentUser;
         setuser(updateduser); // updating the local user again
 
-        setuserimageandname(p => ({...p, image: ''}));
+        setimageofuser('');
       } catch (error) {
         console.log('ProfileErrorAgin ', error);
       }
@@ -177,7 +174,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     logout,
     register,
     forgotpassword,
-    setuserimageandname,
+    setimageofuser,
     updateProfile,
   };
 

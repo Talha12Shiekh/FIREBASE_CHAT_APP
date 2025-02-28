@@ -26,6 +26,10 @@ export type RootStackParamList = {
 // tk.shiekh4567@gmail.com
 // Talhashiekh_5
 
+// Alon musk
+// musk123@gmail.com
+// musk123
+
 type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<
   RootStackParamList,
   'Home',

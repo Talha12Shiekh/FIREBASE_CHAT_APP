@@ -45,7 +45,9 @@ const SendMessageInput = ({currentuser}: {currentuser: UserDataType}) => {
           createdAt: Timestamp.fromDate(new Date()),
         });
       } catch (error) {
-        Alert.alert('Error', error.message);
+        if (error instanceof Error) {
+          Alert.alert('Error', error.message);
+        }
       }
     } else {
       Alert.alert('Alert !', 'You can not send an empty message');

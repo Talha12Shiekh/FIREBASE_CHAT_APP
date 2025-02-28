@@ -7,23 +7,18 @@ import {
   Text,
 } from 'react-native';
 import React from 'react';
-import {CHAT_HEIGHT, TAB_PRESS_ACTIVE_WHITE_COLOR} from '../Constants';
+import {CHAT_HEIGHT} from '../Constants';
 import ProfileImage from '../assets/images/profile.png';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {UserDataType} from '../Screens/Home';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ChatRoomNavigationProps} from './ChatsList';
 
 function initTitle(name: string) {
-  return (
-    <Text style={styles.title}>
-      {name?.length > 18 ? name.slice(0, 19) : name}
-      Name
-    </Text>
-  );
+  console.log(name);
+  return <Text style={styles.title}>{name}</Text>;
 }
 
 function initTime() {
@@ -49,6 +44,7 @@ interface ChatItemProps {
 }
 
 const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
+  console.log(item);
   const {username, userimage} = item;
   return (
     <>

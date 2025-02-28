@@ -5,6 +5,7 @@ import ChatsList from '../Components/ChatsList';
 import {TOP_BAR_COLOR} from '../Constants';
 import {useAuth} from '../Context/AuthContext';
 import firestore from '@react-native-firebase/firestore';
+import EmptyChatsScreen from './EmptyChatsScreen';
 
 export interface UserDataType {
   username: string;
@@ -40,6 +41,10 @@ const Home = () => {
       getUsers();
     }
   }, []);
+
+  if (users.length == 0) {
+    return <EmptyChatsScreen />;
+  }
 
   return (
     <View style={styles.container}>

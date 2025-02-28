@@ -26,24 +26,25 @@ const ChatRoom = ({route}: {route: ChatRoomProps}) => {
   useEffect(() => {
     createChatRoomIfNotExists();
 
-    async function getMessages() {
-      let roomId = getRoomId(user?.uid, item?.userId);
-      let docRef = firestore().collection('Rooms').doc(roomId);
-      let messagesRef = docRef.collection('Messages');
+    let roomId = getRoomId(user?.uid, item?.userId);
+    let docRef = firestore().collection('Rooms').doc(roomId);
+    let messagesRef = docRef.collection('Messages');
+    // sorting the messgages in ascending order
 
-      const snapshot = await messagesRef.orderBy('createdAt', 'asc').get(); // sorting the messgages in ascending order
+    const unsub = messagesRef
+      .orderBy('createdAt', 'asc')
+      .onSnapshot(snapshot => {
+        let messagesData: MessageType[] = [];
 
-      let messagesData: MessageType[] = [];
+        snapshot.forEach(s => {
+          let data = s.data() as MessageType;
+          messagesData.push({...data});
+        });
 
-      snapshot.forEach(s => {
-        let data = s.data() as MessageType;
-        messagesData.push({...data});
+        setmessages(messagesData);
       });
 
-      setmessages(messagesData);
-    }
-
-    getMessages();
+    return unsub;
   }, []);
 
   async function createChatRoomIfNotExists() {

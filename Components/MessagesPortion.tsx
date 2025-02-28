@@ -2,6 +2,7 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {MessageType} from './SendMessageInput';
+import {useAuth} from '../Context/AuthContext';
 
 const MessagesPortion = ({messages}: {messages: MessageType[]}) => {
   return (

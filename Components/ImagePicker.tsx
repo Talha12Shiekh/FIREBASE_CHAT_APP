@@ -27,7 +27,7 @@ type Userimage = {
 
 const ImagePicker = ({topimage}: TopImagetypes) => {
   const [userimage, setuserimage] = useState<Userimage | null>(null);
-  const {setuserimageandname} = useAuth();
+  const {setimageofuser} = useAuth();
 
   async function handleImagePicking() {
     try {
@@ -63,7 +63,7 @@ const ImagePicker = ({topimage}: TopImagetypes) => {
       const result = await uploadResponse.json();
       if (result.secure_url) {
         setuserimage({uri: result.secure_url});
-        setuserimageandname(p => ({...p, image: result.secure_url}));
+        setimageofuser(result.secure_url);
       } else {
         Alert.alert('Upload Failed', 'Something went wrong while uploading.');
       }

@@ -41,6 +41,8 @@ export const MenuItem = ({text, icon, onSelect}: MenuItemProps) => {
 const HomeHeader = () => {
   const {logout, updateProfile, user} = useAuth();
 
+  console.log(user);
+
   async function handleLogout() {
     await logout();
   }
