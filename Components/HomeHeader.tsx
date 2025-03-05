@@ -1,5 +1,5 @@
 import {ImageBackground, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {TOP_BAR_COLOR} from '../Constants';
 import {
@@ -14,6 +14,7 @@ import {useAuth} from '../Context/AuthContext';
 import ProfileImage from '../assets/images/profile.png';
 import firestore from '@react-native-firebase/firestore';
 import {UserDataType} from '../Screens/Home';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 export const Divider = () => {
   return <View style={styles.divider} />;
@@ -39,7 +40,11 @@ export const MenuItem = ({text, icon, onSelect}: MenuItemProps) => {
 const HomeHeader = () => {
   const {logout, user, setuser} = useAuth();
 
+  const [userData, setUserData] = useState<UserDataType | null>(null);
+
   useEffect(() => {
+    if (!user?.uid) return;
+
     try {
       const fetchUser = async () => {
         const querysnapshot = await firestore()
@@ -49,16 +54,17 @@ const HomeHeader = () => {
 
         querysnapshot.forEach(q => {
           let data = q.data() as UserDataType;
-          setuser(p => {
-            if (!p) return null;
+          setUserData(data);
+          // setuser(p => {
+          //   if (!p) return null;
 
-            return {
-              ...p,
-              displayName: data.username,
-              photoURL: data.userimage,
-              uid: data.userId,
-            };
-          });
+          //   return {
+          //     ...p,
+          //     displayName: data.username,
+          //     photoURL: data.userimage,
+          //     uid: data.userId,
+          //   };
+          // });
         });
       };
 
@@ -66,7 +72,25 @@ const HomeHeader = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    if (!userData) return;
+    const loggeduser = auth().currentUser;
+
+    async function updateUser() {
+      if (loggeduser) {
+        await loggeduser.updateProfile({
+          displayName: userData?.username,
+          photoURL: userData?.userimage,
+        });
+
+        const updateduser = auth().currentUser;
+        setuser(updateduser);
+      }
+    }
+    updateUser();
+  }, [userData]);
 
   async function handleLogout() {
     await logout();

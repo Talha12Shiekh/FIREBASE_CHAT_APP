@@ -30,6 +30,10 @@ export type RootStackParamList = {
 // thsiekh119@gmail.com
 // tshk119
 
+// Talha3
+// talha3@gmail.com
+// talha3
+
 type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<
   RootStackParamList,
   'Home',
@@ -41,25 +45,34 @@ const AppContent = () => {
   const {userAuthenticated} = useAuth();
   const navigation = useNavigation<HomeAndSignUpScreenNavigationProps>();
 
-  useEffect(() => {
-    if (userAuthenticated) {
-      navigation.navigate('Home');
-    } else {
-      navigation.navigate('SignUp');
-    }
-  }, [userAuthenticated]);
+  // useEffect(() => {
+  //   if (userAuthenticated) {
+  //     navigation.navigate('Home');
+  //   } else {
+  //     navigation.navigate('SignUp');
+  //   }
+  // }, [userAuthenticated]);
 
-  return (
-    <Stack.Navigator
-      screenOptions={{headerShown: false}}
-      initialRouteName={userAuthenticated ? 'Home' : 'SignUp'}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen name="ChatRoom" component={ChatRoom} />
-    </Stack.Navigator>
-  );
+  if (userAuthenticated) {
+    return (
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        initialRouteName={'Home'}>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="ChatRoom" component={ChatRoom} />
+      </Stack.Navigator>
+    );
+  } else {
+    return (
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        initialRouteName={'SignUp'}>
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="SignIn" component={SignIn} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      </Stack.Navigator>
+    );
+  }
 };
 
 const App = () => {

@@ -44,6 +44,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(usr => {
       if (usr) {
+        console.log(usr);
         setuser(usr);
         setuserAuthenticated(true);
       } else {
@@ -103,6 +104,8 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
         userimage: imageofuser,
         userId: response?.user.uid,
       });
+
+      setimageofuser('');
 
       return {success: true, data: response?.user};
     } catch (error) {

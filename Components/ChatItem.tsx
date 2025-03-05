@@ -31,12 +31,16 @@ function initTime(tme: string) {
   return <Text style={[styles.time, {color: 'grey'}]}>{tme}</Text>;
 }
 
+let lastmsglimit = 'Lorem ipsum dolor sit amet fdaskl ';
+
 function initLastMessage(lstmsg: string) {
   return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <View>
         <Text style={{color: 'grey', fontFamily: 'Poppins-Regular'}}>
-          {lstmsg}
+          {lstmsg.length > lastmsglimit.length
+            ? lstmsg.slice(0, lastmsglimit.length - 1) + '...'
+            : lstmsg}
         </Text>
       </View>
     </View>
