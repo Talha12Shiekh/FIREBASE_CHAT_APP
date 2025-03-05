@@ -5,33 +5,6 @@ import {useAuth} from '../Context/AuthContext';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {MESSAGE_BLUE_COLOR} from '../Constants';
 
-[
-  {
-    createdAt: [Object],
-    profileURL:
-      'https://res.cloudinary.com/dtxzwfyas/image/upload/v1740742528/khpsijdccsexuighf0jr.jpg',
-    senderName: 'Talha shiekh',
-    text: 'Nnnnnnnnnm',
-    userId: 'JKLkRo0Z4YcVzaiwDaWp5qklQHz2',
-  },
-  {
-    createdAt: [Object],
-    profileURL:
-      'https://res.cloudinary.com/dtxzwfyas/image/upload/v1740742750/wrxf25gvnwwv2iww9vb7.jpg',
-    senderName: 'Alon musk',
-    text: 'Bbbbbnbb',
-    userId: 'tbzmU6GknyLdDWao68xsLV8CWv53',
-  },
-  {
-    createdAt: [Object],
-    profileURL:
-      'https://res.cloudinary.com/dtxzwfyas/image/upload/v1740742750/wrxf25gvnwwv2iww9vb7.jpg',
-    senderName: 'Alon musk',
-    text: 'Nnnn',
-    userId: 'tbzmU6GknyLdDWao68xsLV8CWv53',
-  },
-];
-
 const MessageItem = ({message}: {message: MessageType}) => {
   const {user} = useAuth();
 

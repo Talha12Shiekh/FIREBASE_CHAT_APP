@@ -15,9 +15,6 @@ interface PromiseRejectResponse {
   message?: string;
 }
 
-// tkshk123@gmail.com
-// tkshk123
-
 //! PENDING IMAGE PICKER FIX IN SIGN UP SCREEN AND ALSO SHOW LOADING IMAGE WHEN THE USER PICKED THE IMAGE
 
 type PromiseResponse = PromiseSuccessResponse | PromiseRejectResponse;
@@ -34,7 +31,7 @@ interface ContextProviderProps {
     name: string,
   ) => Promise<PromiseResponse>;
   setimageofuser: React.Dispatch<React.SetStateAction<string>>;
-  updateProfile: () => void;
+  setuser: React.Dispatch<React.SetStateAction<FirebaseAuthTypes.User | null>>;
 }
 
 export const AuthContext = createContext<ContextProviderProps | null>(null);
@@ -43,7 +40,6 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
   const [user, setuser] = useState<FirebaseAuthTypes.User | null>(null);
   const [userAuthenticated, setuserAuthenticated] = useState(false);
   const [imageofuser, setimageofuser] = useState('');
-  const [loggedusername, setloggedusername] = useState('');
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(usr => {
@@ -96,8 +92,6 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
   };
 
   const register = async (email: string, password: string, name: string) => {
-    setloggedusername(name);
-    console.log('Credentials', email, password, name);
     try {
       const response = await auth().createUserWithEmailAndPassword(
         email,
@@ -145,28 +139,6 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     }
   };
 
-  const updateProfile = async () => {
-    const user = auth().currentUser;
-    const profileimage = imageofuser;
-
-    if (user) {
-      // checking first that the user exists or not because the updateProfile function will not work if the user does not exists
-      try {
-        await user.updateProfile({
-          displayName: loggedusername,
-          photoURL: profileimage,
-        });
-
-        const updateduser = auth().currentUser;
-        setuser(updateduser); // updating the local user again
-
-        setimageofuser('');
-      } catch (error) {
-        console.log('ProfileErrorAgin ', error);
-      }
-    }
-  };
-
   const contextreturnvalue: ContextProviderProps = {
     user,
     userAuthenticated,
@@ -175,7 +147,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     register,
     forgotpassword,
     setimageofuser,
-    updateProfile,
+    setuser,
   };
 
   return (

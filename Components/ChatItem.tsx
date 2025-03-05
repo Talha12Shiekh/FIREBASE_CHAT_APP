@@ -6,8 +6,8 @@ import {
   Image,
   Text,
 } from 'react-native';
-import React from 'react';
-import {CHAT_HEIGHT} from '../Constants';
+import React, {useEffect, useState} from 'react';
+import {CHAT_HEIGHT, formatDate, getRoomId} from '../Constants';
 import ProfileImage from '../assets/images/profile.png';
 import {
   heightPercentageToDP as hp,
@@ -15,6 +15,9 @@ import {
 } from 'react-native-responsive-screen';
 import {UserDataType} from '../Screens/Home';
 import {ChatRoomNavigationProps} from './ChatsList';
+import {MessageType} from './SendMessageInput';
+import {useAuth} from '../Context/AuthContext';
+import firestore from '@react-native-firebase/firestore';
 
 function initTitle(name: string) {
   return (
@@ -24,16 +27,16 @@ function initTitle(name: string) {
   );
 }
 
-function initTime() {
-  return <Text style={[styles.time, {color: 'grey'}]}>Time</Text>;
+function initTime(tme: string) {
+  return <Text style={[styles.time, {color: 'grey'}]}>{tme}</Text>;
 }
 
-function initDescription() {
+function initLastMessage(lstmsg: string) {
   return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <View>
         <Text style={{color: 'grey', fontFamily: 'Poppins-Regular'}}>
-          Helllo world
+          {lstmsg}
         </Text>
       </View>
     </View>
@@ -47,8 +50,62 @@ interface ChatItemProps {
 }
 
 const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
-  console.log(item);
   const {username, userimage} = item;
+
+  const {user} = useAuth();
+
+  const [lastmessage, setlastmessage] = useState<
+    MessageType | undefined | null
+  >(undefined);
+
+  useEffect(() => {
+    let roomId = getRoomId(user?.uid, item?.userId);
+    let docRef = firestore().collection('Rooms').doc(roomId);
+    let messagesRef = docRef.collection('Messages');
+
+    // sorting the messgages in descending order so that the first message becomes the last message
+
+    const unsub = messagesRef
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(snapshot => {
+        let messagesData: MessageType[] = [];
+
+        snapshot.forEach(s => {
+          let data = s.data() as MessageType;
+          messagesData.push({...data});
+        });
+
+        setlastmessage(messagesData[0] ? messagesData[0] : null);
+      });
+
+    return unsub;
+  }, []);
+
+  function generateTime() {
+    if (lastmessage) {
+      let date = lastmessage?.createdAt;
+      return formatDate(new Date(date.seconds * 1000));
+    } else {
+      return '';
+    }
+  }
+
+  let lastmessagetimetoshow = generateTime();
+
+  function generateLastMessage() {
+    let lstmsg = '';
+    if (lastmessage == undefined) lstmsg = 'Loading...';
+    if (lastmessage != null) {
+      if (user?.uid == lastmessage.userId) lstmsg = 'You: ' + lastmessage.text;
+      else lstmsg = lastmessage.text;
+    } else {
+      lstmsg = 'Say Hi 👋';
+    }
+    return lstmsg;
+  }
+
+  const lastmessagetoshow = generateLastMessage();
+
   return (
     <>
       <TouchableNativeFeedback
@@ -94,11 +151,13 @@ const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
             ]}>
             <View style={{flex: 1, flexDirection: 'row'}}>
               <View style={styles.titleContainer}>{initTitle(username)}</View>
-              <View style={styles.timeContainer}>{initTime()}</View>
+              <View style={styles.timeContainer}>
+                {initTime(lastmessagetimetoshow)}
+              </View>
             </View>
             <View style={{flex: 1, marginTop: wp(2), flexDirection: 'row'}}>
               <View style={{flex: 3, justifyContent: 'flex-start'}}>
-                {initDescription()}
+                {initLastMessage(lastmessagetoshow)}
               </View>
             </View>
           </View>

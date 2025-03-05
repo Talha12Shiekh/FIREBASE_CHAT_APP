@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StatusBar, StyleSheet, View} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {RootStackParamList} from '../App';
 // import {NativeStackScreenProps} from '@react-navigation/native-stack';

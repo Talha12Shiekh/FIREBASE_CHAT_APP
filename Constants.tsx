@@ -13,3 +13,24 @@ export const getRoomId = (user1: string | undefined, user2: string) => {
   const roomid = sortedids.join('-'); // then joining the both ids by -
   return roomid;
 };
+
+export const formatDate = (date: Date) => {
+  const currentDate = date.getDate();
+  let months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const currentMonth = months[date.getMonth()];
+
+  return currentDate + ' ' + currentMonth;
+};

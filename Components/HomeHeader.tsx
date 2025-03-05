@@ -12,10 +12,8 @@ import ProfileIcon from 'react-native-vector-icons/Feather';
 import LogoutIcon from 'react-native-vector-icons/AntDesign';
 import {useAuth} from '../Context/AuthContext';
 import ProfileImage from '../assets/images/profile.png';
-
-// Shair
-// Shair123@gmail.com
-// Shair123
+import firestore from '@react-native-firebase/firestore';
+import {UserDataType} from '../Screens/Home';
 
 export const Divider = () => {
   return <View style={styles.divider} />;
@@ -39,17 +37,40 @@ export const MenuItem = ({text, icon, onSelect}: MenuItemProps) => {
 };
 
 const HomeHeader = () => {
-  const {logout, updateProfile, user} = useAuth();
+  const {logout, user, setuser} = useAuth();
 
-  console.log(user);
+  useEffect(() => {
+    try {
+      const fetchUser = async () => {
+        const querysnapshot = await firestore()
+          .collection('Users')
+          .where('userId', '==', user?.uid)
+          .get();
+
+        querysnapshot.forEach(q => {
+          let data = q.data() as UserDataType;
+          setuser(p => {
+            if (!p) return null;
+
+            return {
+              ...p,
+              displayName: data.username,
+              photoURL: data.userimage,
+              uid: data.userId,
+            };
+          });
+        });
+      };
+
+      fetchUser();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   async function handleLogout() {
     await logout();
   }
-
-  useEffect(() => {
-    updateProfile();
-  }, []);
 
   let profileimage = ProfileImage;
   if (user?.photoURL) profileimage = {uri: user?.photoURL};

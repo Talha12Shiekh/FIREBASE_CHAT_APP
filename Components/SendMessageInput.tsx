@@ -18,7 +18,10 @@ export interface MessageType {
   text: string;
   profileURL: string;
   senderName: string;
-  createdAt: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }
 
 const SendMessageInput = ({currentuser}: {currentuser: UserDataType}) => {

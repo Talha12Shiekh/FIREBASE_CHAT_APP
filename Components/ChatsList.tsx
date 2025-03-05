@@ -1,11 +1,11 @@
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, StatusBar, Text, View} from 'react-native';
 import React from 'react';
 import ChatItem from './ChatItem';
 import {UserDataType} from '../Screens/Home';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../App';
-import EmptyChatsScreen from '../Screens/EmptyChatsScreen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 
 interface ChatsListProps {
   users: UserDataType[];

@@ -19,10 +19,6 @@ const ChatRoomTopBar = ({item}: {item: UserDataType}) => {
 
   return (
     <View>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="rgba(255,255,255,.9)"
-      />
       <View style={styles.topbar}>
         <View style={styles.profileandnamecontainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
