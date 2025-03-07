@@ -44,7 +44,6 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(usr => {
       if (usr) {
-        console.log(usr);
         setuser(usr);
         setuserAuthenticated(true);
       } else {

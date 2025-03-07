@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   ImageSourcePropType,
   StyleSheet,
@@ -16,20 +17,20 @@ import ProfileImage from '../assets/images/profile.png';
 import {useRoute} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import {useAuth} from '../Context/AuthContext';
+import {Userimage} from './ImagePickerContainer';
 
 type TopImagetypes = {
   topimage: ImageSourcePropType | undefined | string;
+  setuserimage: React.Dispatch<React.SetStateAction<Userimage | null>>;
+  userimage: Userimage | null;
 };
 
-type Userimage = {
-  uri: string;
-};
-
-const ImagePicker = ({topimage}: TopImagetypes) => {
-  const [userimage, setuserimage] = useState<Userimage | null>(null);
+const ImagePicker = ({topimage, setuserimage, userimage}: TopImagetypes) => {
+  const [imguploaded, setimguploaded] = useState(false);
   const {setimageofuser} = useAuth();
 
   async function handleImagePicking() {
+    setimguploaded(true);
     try {
       const image = await ImagePickerPackage.openPicker({
         width: 300,
@@ -61,6 +62,7 @@ const ImagePicker = ({topimage}: TopImagetypes) => {
       );
 
       const result = await uploadResponse.json();
+      setimguploaded(false);
       if (result.secure_url) {
         setuserimage({uri: result.secure_url});
         setimageofuser(result.secure_url);
@@ -100,7 +102,11 @@ const ImagePicker = ({topimage}: TopImagetypes) => {
       {route.name == 'SignUp' && (
         <TouchableOpacity style={styles.camerabtn} onPress={handleImagePicking}>
           <View style={styles.cameraContainer}>
-            <CameraIcon name="camera" size={25} color="white" />
+            {imguploaded ? (
+              <ActivityIndicator size={wp(8)} />
+            ) : (
+              <CameraIcon name="camera" size={25} color="white" />
+            )}
           </View>
         </TouchableOpacity>
       )}

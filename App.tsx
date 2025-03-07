@@ -1,14 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {AuthContextProvider, useAuth} from './Context/AuthContext';
-import {
-  NavigationContainer,
-  RouteProp,
-  useNavigation,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home, {UserDataType} from './Screens/Home';
 import SignUp from './Screens/SignUp';
-import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SignIn from './Screens/SignIn';
 import ForgotPassword from './Screens/ForgotPassword';
 import {MenuProvider} from 'react-native-popup-menu';
@@ -24,34 +19,18 @@ export type RootStackParamList = {
 
 // Talha shiekh
 // tk.shiekh4567@gmail.com
-// tkshk123
+// Talhashiekh_5
 
-// Tshiekh
-// thsiekh119@gmail.com
-// tshk119
+// Talha2
+// tshiekh119@gmail.com
+// Talha2
 
-// Talha3
-// talha3@gmail.com
-// talha3
+//https://www.figma.com/design/QP6EMSkbS7c1L1d9BPIdI1/Empty-State-Illustrations-Freebies-%E2%AD%90-(Community)?node-id=1-440&t=we4kgQRXjvsilI6s-0
 
-type HomeAndSignUpScreenNavigationProps = NativeStackNavigationProp<
-  RootStackParamList,
-  'Home',
-  'SignUp'
->;
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppContent = () => {
   const {userAuthenticated} = useAuth();
-  const navigation = useNavigation<HomeAndSignUpScreenNavigationProps>();
-
-  // useEffect(() => {
-  //   if (userAuthenticated) {
-  //     navigation.navigate('Home');
-  //   } else {
-  //     navigation.navigate('SignUp');
-  //   }
-  // }, [userAuthenticated]);
 
   if (userAuthenticated) {
     return (

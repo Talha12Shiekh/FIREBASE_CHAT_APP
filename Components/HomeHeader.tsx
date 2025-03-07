@@ -1,4 +1,4 @@
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {TOP_BAR_COLOR} from '../Constants';
@@ -14,7 +14,7 @@ import {useAuth} from '../Context/AuthContext';
 import ProfileImage from '../assets/images/profile.png';
 import firestore from '@react-native-firebase/firestore';
 import {UserDataType} from '../Screens/Home';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 
 export const Divider = () => {
   return <View style={styles.divider} />;
@@ -55,16 +55,6 @@ const HomeHeader = () => {
         querysnapshot.forEach(q => {
           let data = q.data() as UserDataType;
           setUserData(data);
-          // setuser(p => {
-          //   if (!p) return null;
-
-          //   return {
-          //     ...p,
-          //     displayName: data.username,
-          //     photoURL: data.userimage,
-          //     uid: data.userId,
-          //   };
-          // });
         });
       };
 
@@ -96,9 +86,9 @@ const HomeHeader = () => {
     await logout();
   }
 
-  let profileimage = ProfileImage;
+  let profileimage = null;
   if (user?.photoURL) profileimage = {uri: user?.photoURL};
-  else profileimage = ProfileImage;
+  else profileimage = null;
 
   return (
     <View style={styles.topHeader}>
@@ -107,11 +97,15 @@ const HomeHeader = () => {
       </View>
       <Menu>
         <MenuTrigger>
-          <View>
-            <ImageBackground
-              source={profileimage}
+          <View style={[styles.profilecontainer]}>
+            <Image
+              source={profileimage == null ? ProfileImage : profileimage}
+              style={{
+                width: '100%',
+                height: '100%',
+                transform: [{scale: profileimage == null ? 1.6 : 1}],
+              }}
               resizeMode="cover"
-              style={[styles.profilecontainer]}
             />
           </View>
         </MenuTrigger>

@@ -15,10 +15,12 @@ export interface UserDataType {
 
 const Home = () => {
   const [users, setusers] = useState<UserDataType[]>([]);
+  const [usersloaded, setusersloaded] = useState(false);
 
   const {user} = useAuth();
 
   async function getUsers() {
+    setusersloaded(true);
     let userdata: UserDataType[] = [];
 
     // getting all the users that are logged in instead of the current user
@@ -33,6 +35,7 @@ const Home = () => {
       userdata.push({...data});
     });
 
+    setusersloaded(false);
     setusers(userdata);
   }
 
@@ -42,18 +45,20 @@ const Home = () => {
     }
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <HomeHeader />
-      {users.length > 0 ? (
-        <ChatsList users={users} />
-      ) : (
-        <View style={styles.loadingcontainer}>
-          <ActivityIndicator color={TOP_BAR_COLOR} size="large" />
-        </View>
-      )}
-    </View>
-  );
+  if (usersloaded) {
+    return (
+      <View style={styles.loadingcontainer}>
+        <ActivityIndicator color={TOP_BAR_COLOR} size="large" />
+      </View>
+    );
+  } else {
+    return (
+      <>
+        <HomeHeader />
+        {users.length > 0 ? <ChatsList users={users} /> : <EmptyChatsScreen />}
+      </>
+    );
+  }
 };
 
 export default Home;

@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import React from 'react';
 import EMPTY_SCREEN_IMAGE from '../assets/images/EMPTY_SCREEN_IMAGE.jpg';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
