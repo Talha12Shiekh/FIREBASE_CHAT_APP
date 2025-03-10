@@ -6,6 +6,7 @@ import {TOP_BAR_COLOR} from '../Constants';
 import {useAuth} from '../Context/AuthContext';
 import firestore from '@react-native-firebase/firestore';
 import EmptyChatsScreen from './EmptyChatsScreen';
+import SkeletonLoader from '../Components/SkeletonLoader';
 
 export interface UserDataType {
   username: string;
@@ -47,9 +48,10 @@ const Home = () => {
 
   if (usersloaded) {
     return (
-      <View style={styles.loadingcontainer}>
-        <ActivityIndicator color={TOP_BAR_COLOR} size="large" />
-      </View>
+      <>
+        <HomeHeader />
+        <SkeletonLoader />
+      </>
     );
   } else {
     return (
@@ -62,12 +64,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  container: {flex: 1},
-  loadingcontainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

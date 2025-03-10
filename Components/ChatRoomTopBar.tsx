@@ -1,4 +1,5 @@
 import {
+  Image,
   ImageBackground,
   StatusBar,
   StyleSheet,
@@ -13,9 +14,13 @@ import VideoIcon from 'react-native-vector-icons/FontAwesome5';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {UserDataType} from '../Screens/Home';
 import {useNavigation} from '@react-navigation/native';
+import ProfileImage from '../assets/images/profile.png';
 
 const ChatRoomTopBar = ({item}: {item: UserDataType}) => {
   const navigation = useNavigation();
+
+  let chatuserimage = null;
+  if (item.userimage) chatuserimage = {uri: item.userimage};
 
   return (
     <View>
@@ -29,11 +34,23 @@ const ChatRoomTopBar = ({item}: {item: UserDataType}) => {
           <TouchableOpacity>
             <View style={[styles.profileandnamecontainer, {gap: wp(3)}]}>
               <View style={styles.profilecontainer}>
-                <ImageBackground
-                  source={{uri: item.userimage}}
-                  style={styles.profileimage}
-                  resizeMode="cover"
-                />
+                <View style={styles.profileimage}>
+                  <Image
+                    source={
+                      chatuserimage == null ? ProfileImage : chatuserimage
+                    }
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      transform: [
+                        {
+                          scale: chatuserimage == null ? 1.5 : 1,
+                        },
+                      ],
+                    }}
+                    resizeMode="cover"
+                  />
+                </View>
               </View>
               <View>
                 <Text style={styles.username}>{item.username}</Text>
