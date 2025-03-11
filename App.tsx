@@ -8,6 +8,7 @@ import SignIn from './Screens/SignIn';
 import ForgotPassword from './Screens/ForgotPassword';
 import {MenuProvider} from 'react-native-popup-menu';
 import ChatRoom from './Screens/ChatRoom';
+import Profile from './Screens/Profile';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -15,6 +16,7 @@ export type RootStackParamList = {
   SignIn: undefined;
   ForgotPassword: undefined;
   ChatRoom: {item: UserDataType};
+  Profile: undefined;
 };
 
 // Talha shiekh
@@ -38,6 +40,11 @@ const AppContent = () => {
         screenOptions={{headerShown: false}}
         initialRouteName={'Home'}>
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen
+          options={{headerShown: true}}
+          name="Profile"
+          component={Profile}
+        />
         <Stack.Screen name="ChatRoom" component={ChatRoom} />
       </Stack.Navigator>
     );

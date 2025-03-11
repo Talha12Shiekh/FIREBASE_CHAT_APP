@@ -20,7 +20,7 @@ import {useAuth} from '../Context/AuthContext';
 import {Userimage} from './ImagePickerContainer';
 
 type TopImagetypes = {
-  topimage: ImageSourcePropType | undefined | string;
+  topimage: ImageSourcePropType | undefined | string | {uri: string};
   setuserimage: React.Dispatch<React.SetStateAction<Userimage | null>>;
   userimage: Userimage | null;
 };
@@ -76,11 +76,7 @@ const ImagePicker = ({topimage, setuserimage, userimage}: TopImagetypes) => {
 
   const route = useRoute();
 
-  let imagetoshow = undefined;
-
-  if (route.name !== 'SignUp') imagetoshow = topimage;
-  else if (userimage == null) imagetoshow = ProfileImage;
-  else imagetoshow = userimage;
+  let imagetoshow = topimage || userimage || ProfileImage;
 
   return (
     <View style={[styles.pickercontainer, {backgroundColor: 'transparent'}]}>
@@ -88,18 +84,17 @@ const ImagePicker = ({topimage, setuserimage, userimage}: TopImagetypes) => {
         source={imagetoshow}
         resizeMode="cover"
         style={{
-          width: '100%',
-          height: '100%',
-          borderRadius: 100,
+          width: wp(50),
+          height: wp(50),
+          borderRadius: wp(25),
           transform: [
             {
-              scale:
-                route.name == 'SignUp' ? (userimage == null ? 1.6 : 1) : 1.3,
+              scale: userimage == null ? 1.6 : 1,
             },
           ],
         }}
       />
-      {route.name == 'SignUp' && (
+      {(route.name == 'SignUp' || route.name == 'Profile') && (
         <TouchableOpacity style={styles.camerabtn} onPress={handleImagePicking}>
           <View style={styles.cameraContainer}>
             {imguploaded ? (
@@ -118,11 +113,7 @@ export default ImagePicker;
 
 const styles = StyleSheet.create({
   pickercontainer: {
-    width: wp(50),
-    aspectRatio: 1,
-    borderRadius: 100,
     marginVertical: wp(10),
-    position: 'relative',
   },
   cameraContainer: {
     width: wp(12),

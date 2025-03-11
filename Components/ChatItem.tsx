@@ -18,6 +18,7 @@ import {ChatRoomNavigationProps} from './ChatsList';
 import {MessageType} from './SendMessageInput';
 import {useAuth} from '../Context/AuthContext';
 import firestore from '@react-native-firebase/firestore';
+import ProfileImageShowModal from './ProfileImageShowModal';
 
 function initTitle(name: string) {
   return (
@@ -55,6 +56,8 @@ interface ChatItemProps {
 
 const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
   const {username, userimage} = item;
+
+  const [modalvisible, setmodalvisible] = useState(false);
 
   const {user} = useAuth();
 
@@ -112,6 +115,11 @@ const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
 
   return (
     <>
+      <ProfileImageShowModal
+        modalvisible={modalvisible}
+        image={item.userimage}
+        setmodalvisible={setmodalvisible}
+      />
       <TouchableNativeFeedback
         onPress={() => navigation.navigate('ChatRoom', {item})}
         background={TouchableNativeFeedback.Ripple('rgba(0,0,0,.1)', false)}>
@@ -124,7 +132,7 @@ const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
               paddingLeft: wp(4),
             },
           ]}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => setmodalvisible(true)}>
             <View
               style={{
                 height: hp(5.5),

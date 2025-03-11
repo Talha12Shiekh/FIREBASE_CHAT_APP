@@ -15,6 +15,9 @@ import ProfileImage from '../assets/images/profile.png';
 import firestore from '@react-native-firebase/firestore';
 import {UserDataType} from '../Screens/Home';
 import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../App';
 
 export const Divider = () => {
   return <View style={styles.divider} />;
@@ -37,8 +40,15 @@ export const MenuItem = ({text, icon, onSelect}: MenuItemProps) => {
   );
 };
 
+type ProfileScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Profile'
+>;
+
 const HomeHeader = () => {
   const {logout, user, setuser} = useAuth();
+
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const [userData, setUserData] = useState<UserDataType | null>(null);
 
@@ -130,7 +140,7 @@ const HomeHeader = () => {
           <MenuItem
             text="Profile"
             icon={<ProfileIcon name="user" color="grey" size={wp(5)} />}
-            onSelect={() => {}}
+            onSelect={() => navigation.navigate('Profile')}
           />
           <Divider />
           <MenuItem
