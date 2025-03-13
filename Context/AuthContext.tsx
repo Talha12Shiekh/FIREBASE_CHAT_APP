@@ -32,6 +32,10 @@ interface ContextProviderProps {
   ) => Promise<PromiseResponse>;
   setimageofuser: React.Dispatch<React.SetStateAction<string>>;
   setuser: React.Dispatch<React.SetStateAction<FirebaseAuthTypes.User | null>>;
+  updateUser: (updatedata: {
+    displayName?: string;
+    photoURL?: string;
+  }) => Promise<void>;
 }
 
 export const AuthContext = createContext<ContextProviderProps | null>(null);
@@ -141,6 +145,20 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     }
   };
 
+  async function updateUser(updatedata: {
+    displayName?: string;
+    photoURL?: string;
+  }) {
+    const loggeduser = auth().currentUser;
+
+    if (loggeduser) {
+      await loggeduser.updateProfile(updatedata);
+
+      const updateduser = auth().currentUser;
+      setuser(updateduser);
+    }
+  }
+
   const contextreturnvalue: ContextProviderProps = {
     user,
     userAuthenticated,
@@ -150,6 +168,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     forgotpassword,
     setimageofuser,
     setuser,
+    updateUser,
   };
 
   return (

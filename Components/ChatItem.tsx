@@ -100,18 +100,27 @@ const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
   let lastmessagetimetoshow = generateTime();
 
   function generateLastMessage() {
-    let lstmsg = '';
-    if (lastmessage == undefined) lstmsg = 'Loading...';
-    if (lastmessage != null) {
-      if (user?.uid == lastmessage.userId) lstmsg = 'You: ' + lastmessage.text;
-      else lstmsg = lastmessage.text;
+    if (typeof lastmessage == 'undefined') return 'Loading...';
+    if (lastmessage) {
+      if (user?.uid === lastmessage.userId) return 'You: ' + lastmessage.text;
+      return lastmessage.text;
     } else {
-      lstmsg = 'Say Hi 👋';
+      return 'Say Hi 👋';
     }
-    return lstmsg;
   }
 
+  // function generateLastMessage() {
+  //   if (lastmessage === undefined) return 'Loading...'; // Check explicitly for undefined
+  //   if (lastmessage === null) return 'Say Hi 👋'; // Now explicitly handle null
+  //   if (user?.uid === lastmessage.userId) return 'You: ' + lastmessage.text;
+  //   return lastmessage.text;
+  // }
+
   const lastmessagetoshow = generateLastMessage();
+
+  function handleOpenProfileModal() {
+    if (!modalvisible) setmodalvisible(true);
+  }
 
   return (
     <>
@@ -119,6 +128,7 @@ const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
         modalvisible={modalvisible}
         image={item.userimage}
         setmodalvisible={setmodalvisible}
+        modaltext={item.username}
       />
       <TouchableNativeFeedback
         onPress={() => navigation.navigate('ChatRoom', {item})}
@@ -132,7 +142,7 @@ const ChatItem = ({noBorder, item, navigation}: ChatItemProps) => {
               paddingLeft: wp(4),
             },
           ]}>
-          <TouchableOpacity onPress={() => setmodalvisible(true)}>
+          <TouchableOpacity onPress={handleOpenProfileModal}>
             <View
               style={{
                 height: hp(5.5),

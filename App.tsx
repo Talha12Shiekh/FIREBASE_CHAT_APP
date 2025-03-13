@@ -9,6 +9,7 @@ import ForgotPassword from './Screens/ForgotPassword';
 import {MenuProvider} from 'react-native-popup-menu';
 import ChatRoom from './Screens/ChatRoom';
 import Profile from './Screens/Profile';
+import ProfileImageViewScreen from './Screens/ProfileImageViewScreen';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -17,15 +18,24 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   ChatRoom: {item: UserDataType};
   Profile: undefined;
+  ProfileImageView: {
+    title: string;
+    profileimage: string;
+    imageexists: boolean;
+  };
 };
 
 // Talha shiekh
 // tk.shiekh4567@gmail.com
-// Talhashiekh_5
+// tkshk123
 
 // Talha2
 // tshiekh119@gmail.com
 // Talha2
+
+// User1
+// user1@gmail.com
+// user123
 
 //https://www.figma.com/design/QP6EMSkbS7c1L1d9BPIdI1/Empty-State-Illustrations-Freebies-%E2%AD%90-(Community)?node-id=1-440&t=we4kgQRXjvsilI6s-0
 
@@ -46,6 +56,14 @@ const AppContent = () => {
           component={Profile}
         />
         <Stack.Screen name="ChatRoom" component={ChatRoom} />
+        <Stack.Screen
+          name="ProfileImageView"
+          options={({route}) => ({
+            headerShown: true,
+            title: route.params.title,
+          })}
+          component={ProfileImageViewScreen}
+        />
       </Stack.Navigator>
     );
   } else {

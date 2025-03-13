@@ -5,24 +5,46 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import ProfileImage from '../assets/images/profile.png';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../App';
 interface ProfileModalProps {
   modalvisible: boolean;
   image: ImageSourcePropType | undefined | string;
   setmodalvisible: React.Dispatch<React.SetStateAction<boolean>>;
+  modaltext: string;
 }
 
 const ProfileImageShowModal = ({
   modalvisible,
   image,
   setmodalvisible,
+  modaltext,
 }: ProfileModalProps) => {
   let modalimage = ProfileImage;
   if (image != '') modalimage = {uri: image};
+
+  type ProfileImageViewScreenProps = NativeStackNavigationProp<
+    RootStackParamList,
+    'ProfileImageView'
+  >;
+
+  const navigation = useNavigation<ProfileImageViewScreenProps>();
+
+  function handleNavigatetoViewScreen() {
+    setmodalvisible(false);
+    navigation.navigate('ProfileImageView', {
+      title: modaltext,
+      profileimage: modalimage,
+      imageexists: image != '',
+    });
+  }
 
   return (
     <>
@@ -30,26 +52,28 @@ const ProfileImageShowModal = ({
         animationType="slide"
         transparent={true}
         visible={modalvisible}
-        onRequestClose={() => setmodalvisible(p => !p)}>
+        onRequestClose={() => setmodalvisible(false)}>
         <Pressable
           style={styles.backdrop}
-          onPress={() => setmodalvisible(p => !p)}
+          onPress={() => setmodalvisible(false)}
         />
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.chatnamecontainer}>
-              <Text style={styles.chatnametext}>hello world</Text>
+        <TouchableOpacity onPress={handleNavigatetoViewScreen}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.chatnamecontainer}>
+                <Text style={styles.chatnametext}>{modaltext}</Text>
+              </View>
+              <Image
+                source={modalimage}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  transform: [{scale: image != '' ? 1 : 1.5}],
+                }}
+              />
             </View>
-            <Image
-              source={modalimage}
-              style={{
-                width: '100%',
-                height: '100%',
-                transform: [{scale: image != '' ? 1 : 1.5}],
-              }}
-            />
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
     </>
   );
@@ -76,10 +100,9 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: wp(65),
     aspectRatio: 1,
-    padding: 2,
   },
   chatnamecontainer: {
-    backgroundColor: 'rgba(0,0,0,.2)',
+    backgroundColor: 'rgba(0,0,0,.5)',
     width: '100%',
     position: 'absolute',
     zIndex: 999999,
