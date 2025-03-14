@@ -95,7 +95,7 @@ const ImagePicker = ({
 
       const result = await uploadResponse.json();
       if (result.secure_url) {
-        setuserimage({uri: result.secure_url});
+        setuserimage({uri: result.secure_url}); // pending move this to last when the image is updated
 
         setimageofuser(result.secure_url);
 
