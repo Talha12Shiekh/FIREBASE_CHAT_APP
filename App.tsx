@@ -37,6 +37,10 @@ export type RootStackParamList = {
 // user1@gmail.com
 // user123
 
+//Sigma man
+// wrestlingempire707@gmail.coms
+// sigma123
+
 //https://www.figma.com/design/QP6EMSkbS7c1L1d9BPIdI1/Empty-State-Illustrations-Freebies-%E2%AD%90-(Community)?node-id=1-440&t=we4kgQRXjvsilI6s-0
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

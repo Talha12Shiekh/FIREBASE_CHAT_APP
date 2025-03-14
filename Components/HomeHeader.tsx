@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Alert, Image, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {TOP_BAR_COLOR} from '../Constants';
@@ -14,14 +14,16 @@ import {useAuth} from '../Context/AuthContext';
 import ProfileImage from '../assets/images/profile.png';
 import firestore from '@react-native-firebase/firestore';
 import {UserDataType} from '../Screens/Home';
-import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../App';
+import {Appearance} from 'react-native';
 
 export const Divider = () => {
   return <View style={styles.divider} />;
 };
+
+Appearance.setColorScheme('light');
 
 interface MenuItemProps {
   text: string;
@@ -46,7 +48,7 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 const HomeHeader = () => {
-  const {logout, user, setuser} = useAuth();
+  const {logout, user, setuser, updateUser} = useAuth();
 
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
@@ -69,31 +71,33 @@ const HomeHeader = () => {
       };
 
       fetchUser();
+
+      async function handleUpdateUser() {
+        await updateUser({
+          displayName: userData?.username,
+          photoURL: userData?.userimage,
+        });
+      }
+
+      handleUpdateUser();
     } catch (error) {
       console.log(error);
     }
   }, [user]);
 
-  useEffect(() => {
-    if (!userData) return;
-    const loggeduser = auth().currentUser;
-
-    async function updateUser() {
-      if (loggeduser) {
-        await loggeduser.updateProfile({
-          displayName: userData?.username,
-          photoURL: userData?.userimage,
-        });
-
-        const updateduser = auth().currentUser;
-        setuser(updateduser);
-      }
-    }
-    updateUser();
-  }, [userData]);
-
   async function handleLogout() {
     await logout();
+  }
+
+  function handleLogoutButtonPress() {
+    Alert.alert('Logout !', 'Are you sure do you want to logout ?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {text: 'YES', onPress: handleLogout},
+    ]);
   }
 
   let profileimage = null;
@@ -146,7 +150,7 @@ const HomeHeader = () => {
           <MenuItem
             text="Logout"
             icon={<LogoutIcon name="logout" color="grey" size={wp(5)} />}
-            onSelect={handleLogout}
+            onSelect={handleLogoutButtonPress}
           />
         </MenuOptions>
       </Menu>

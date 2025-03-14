@@ -54,6 +54,7 @@ const Profile = () => {
           setuserimage={setuserimage}
           userimage={userimage}
           topimage={undefined}
+          isProfileScreen
         />
       </View>
       <UserInformationComponent
@@ -65,13 +66,11 @@ const Profile = () => {
         value={user?.displayName}
       />
       <UserInformationComponent
-        onPress={() => {}}
         icon={<MailIcon size={ICON_SIZE} color="grey" name="mail" />}
         heading="Email"
         value={user?.email}
       />
       <UserInformationComponent
-        onPress={() => {}}
         icon={<TimeIcon size={ICON_SIZE} color="grey" name="date" />}
         heading="Created At"
         value={

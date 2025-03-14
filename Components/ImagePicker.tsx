@@ -3,6 +3,7 @@ import {
   Image,
   ImageSourcePropType,
   StyleSheet,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -18,16 +19,47 @@ import {useRoute} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import {useAuth} from '../Context/AuthContext';
 import {Userimage} from './ImagePickerContainer';
+import firestore from '@react-native-firebase/firestore';
+import {KeyboardAwareMixin} from 'react-native-keyboard-aware-scroll-view';
 
 type TopImagetypes = {
   topimage: ImageSourcePropType | undefined | string | {uri: string};
   setuserimage: React.Dispatch<React.SetStateAction<Userimage | null>>;
   userimage: Userimage | null;
+  isProfileScreen: boolean;
 };
 
-const ImagePicker = ({topimage, setuserimage, userimage}: TopImagetypes) => {
+const ImagePicker = ({
+  topimage,
+  setuserimage,
+  userimage,
+  isProfileScreen = false,
+}: TopImagetypes) => {
   const [imguploaded, setimguploaded] = useState(false);
-  const {setimageofuser} = useAuth();
+  const {setimageofuser, updateUser, user} = useAuth();
+
+  async function handleUpdateUserInFirebase(userimg: string) {
+    try {
+      const querysnapshot = await firestore()
+        .collection('Users')
+        .where('userId', '==', user?.uid)
+        .get();
+
+      if (!querysnapshot.empty) {
+        console.log('hello again');
+        const userDoc = querysnapshot.docs[0];
+
+        await firestore().collection('Users').doc(userDoc.id).update({
+          userimage: userimg,
+        });
+      }
+
+      setimguploaded(false);
+    } catch (error) {
+      setimguploaded(false);
+      console.log(error);
+    }
+  }
 
   async function handleImagePicking() {
     setimguploaded(true);
@@ -62,15 +94,30 @@ const ImagePicker = ({topimage, setuserimage, userimage}: TopImagetypes) => {
       );
 
       const result = await uploadResponse.json();
-      setimguploaded(false);
       if (result.secure_url) {
         setuserimage({uri: result.secure_url});
+
         setimageofuser(result.secure_url);
+
+        if (isProfileScreen) {
+          await handleUpdateUserInFirebase(result.secure_url);
+
+          await updateUser({
+            photoURL: result.secure_url,
+          });
+
+          console.log('Image Updated');
+
+          setimguploaded(false);
+          ToastAndroid.show('Profile Photo Updated !', ToastAndroid.SHORT);
+        }
       } else {
+        setimguploaded(false);
         Alert.alert('Upload Failed', 'Something went wrong while uploading.');
       }
     } catch (error) {
       console.log(error);
+      setimguploaded(false);
     }
   }
 
@@ -98,7 +145,7 @@ const ImagePicker = ({topimage, setuserimage, userimage}: TopImagetypes) => {
         <TouchableOpacity style={styles.camerabtn} onPress={handleImagePicking}>
           <View style={styles.cameraContainer}>
             {imguploaded ? (
-              <ActivityIndicator size={wp(8)} />
+              <ActivityIndicator color="rgba(255,255,255,.6)" size={wp(8)} />
             ) : (
               <CameraIcon name="camera" size={25} color="white" />
             )}

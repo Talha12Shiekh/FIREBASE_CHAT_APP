@@ -153,6 +153,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
 
     if (loggeduser) {
       await loggeduser.updateProfile(updatedata);
+      await loggeduser.reload();
 
       const updateduser = auth().currentUser;
       setuser(updateduser);

@@ -75,6 +75,7 @@ const ImagePickerContainer = ({
           setuserimage={setuserimage}
           userimage={userimage}
           topimage={topimage}
+          isProfileScreen={false}
         />
       )}
     </Animated.View>
