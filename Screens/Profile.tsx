@@ -1,5 +1,12 @@
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  ToastAndroid,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native';
+import React, {useRef, useState} from 'react';
 import ImagePicker from '../Components/ImagePicker';
 import {Userimage} from '../Components/ImagePickerContainer';
 import {useAuth} from '../Context/AuthContext';
@@ -8,6 +15,7 @@ import {formatDate} from '../Constants';
 import ProfileIcon from 'react-native-vector-icons/Ionicons';
 import MailIcon from 'react-native-vector-icons/AntDesign';
 import TimeIcon from 'react-native-vector-icons/Fontisto';
+import NameUpdateModel from '../Components/NameUpdateModel';
 
 interface UserInformationComponentProps {
   onPress?: () => void;
@@ -40,15 +48,44 @@ export const UserInformationComponent = ({
 const Profile = () => {
   const ICON_SIZE = 25;
 
-  const {user} = useAuth();
+  const {user, handleUpdateUserInFirebase, updateUser} = useAuth();
   const [userimage, setuserimage] = useState<Userimage | null>(
     user?.photoURL ? {uri: user.photoURL} : null,
   );
 
-  const usercreatedtime = new Date(user?.metadata.creationTime);
+  const [shownamemodal, setshownamemodal] = useState(false);
+
+  const usercreatedtime = new Date(user?.metadata.creationTime ?? new Date());
+
+  const [namevalue, setnamevalue] = useState<string>(user?.displayName ?? '');
+
+  const [nameupdated, setnameupdated] = useState(false);
+
+  async function handleSaveButtonPress() {
+    try {
+      setnameupdated(true);
+      setshownamemodal(false);
+      await handleUpdateUserInFirebase(user, {username: namevalue});
+      await updateUser({displayName: namevalue});
+      ToastAndroid.show('Name Updated Successfully !', ToastAndroid.SHORT);
+      setnameupdated(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const nameInputRef = useRef<TextInput | null>(null);
 
   return (
     <View>
+      <NameUpdateModel
+        modalopen={shownamemodal}
+        setmodalopen={setshownamemodal}
+        onSavePress={handleSaveButtonPress}
+        value={namevalue}
+        setnamevalue={setnamevalue}
+        inputref={nameInputRef}
+      />
       <View style={{alignItems: 'center'}}>
         <ImagePicker
           setuserimage={setuserimage}
@@ -58,12 +95,16 @@ const Profile = () => {
         />
       </View>
       <UserInformationComponent
-        onPress={() => {}}
+        onPress={() => {
+          setshownamemodal(true);
+          setnamevalue(user?.displayName ?? '');
+          setTimeout(() => nameInputRef.current?.focus(), 200);
+        }}
         icon={
           <ProfileIcon size={ICON_SIZE} color="grey" name="person-outline" />
         }
         heading="Name"
-        value={user?.displayName}
+        value={nameupdated ? 'Updating...' : user?.displayName}
       />
       <UserInformationComponent
         icon={<MailIcon size={ICON_SIZE} color="grey" name="mail" />}

@@ -36,6 +36,10 @@ interface ContextProviderProps {
     displayName?: string;
     photoURL?: string;
   }) => Promise<void>;
+  handleUpdateUserInFirebase: (
+    loggeduser: FirebaseAuthTypes.User | null,
+    updateObject: {userimage?: string; username?: string},
+  ) => Promise<void>;
 }
 
 export const AuthContext = createContext<ContextProviderProps | null>(null);
@@ -160,6 +164,33 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     }
   }
 
+  async function handleUpdateUserInFirebase(
+    loggeduser: FirebaseAuthTypes.User | null,
+    updateObject: {userimage?: string; username?: string},
+  ) {
+    try {
+      const querysnapshot = await firestore()
+        .collection('Users')
+        .where('userId', '==', loggeduser?.uid)
+        .get();
+
+      if (!querysnapshot.empty) {
+        console.log('hello again');
+        const userDoc = querysnapshot.docs[0];
+
+        await firestore()
+          .collection('Users')
+          .doc(userDoc.id)
+          .update(updateObject);
+      }
+
+      // setimguploaded(false);
+    } catch (error) {
+      // setimguploaded(false);
+      console.log(error);
+    }
+  }
+
   const contextreturnvalue: ContextProviderProps = {
     user,
     userAuthenticated,
@@ -170,6 +201,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     setimageofuser,
     setuser,
     updateUser,
+    handleUpdateUserInFirebase,
   };
 
   return (

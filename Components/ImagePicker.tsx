@@ -8,10 +8,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import CameraIcon from 'react-native-vector-icons/Entypo';
 import ImagePickerPackage from 'react-native-image-crop-picker';
 import ProfileImage from '../assets/images/profile.png';
@@ -20,7 +17,6 @@ import {Alert} from 'react-native';
 import {useAuth} from '../Context/AuthContext';
 import {Userimage} from './ImagePickerContainer';
 import firestore from '@react-native-firebase/firestore';
-import {KeyboardAwareMixin} from 'react-native-keyboard-aware-scroll-view';
 
 type TopImagetypes = {
   topimage: ImageSourcePropType | undefined | string | {uri: string};
@@ -36,30 +32,31 @@ const ImagePicker = ({
   isProfileScreen = false,
 }: TopImagetypes) => {
   const [imguploaded, setimguploaded] = useState(false);
-  const {setimageofuser, updateUser, user} = useAuth();
+  const {setimageofuser, updateUser, user, handleUpdateUserInFirebase} =
+    useAuth();
 
-  async function handleUpdateUserInFirebase(userimg: string) {
-    try {
-      const querysnapshot = await firestore()
-        .collection('Users')
-        .where('userId', '==', user?.uid)
-        .get();
+  // async function handleUpdateUserInFirebase(userimg: string) {
+  //   try {
+  //     const querysnapshot = await firestore()
+  //       .collection('Users')
+  //       .where('userId', '==', user?.uid)
+  //       .get();
 
-      if (!querysnapshot.empty) {
-        console.log('hello again');
-        const userDoc = querysnapshot.docs[0];
+  //     if (!querysnapshot.empty) {
+  //       console.log('hello again');
+  //       const userDoc = querysnapshot.docs[0];
 
-        await firestore().collection('Users').doc(userDoc.id).update({
-          userimage: userimg,
-        });
-      }
+  //       await firestore().collection('Users').doc(userDoc.id).update({
+  //         userimage: userimg,
+  //       });
+  //     }
 
-      setimguploaded(false);
-    } catch (error) {
-      setimguploaded(false);
-      console.log(error);
-    }
-  }
+  //     setimguploaded(false);
+  //   } catch (error) {
+  //     setimguploaded(false);
+  //     console.log(error);
+  //   }
+  // }
 
   async function handleImagePicking() {
     setimguploaded(true);
@@ -95,18 +92,20 @@ const ImagePicker = ({
 
       const result = await uploadResponse.json();
       if (result.secure_url) {
-        setuserimage({uri: result.secure_url}); // pending move this to last when the image is updated
+        if (!isProfileScreen) setuserimage({uri: result.secure_url});
 
         setimageofuser(result.secure_url);
 
         if (isProfileScreen) {
-          await handleUpdateUserInFirebase(result.secure_url);
+          await handleUpdateUserInFirebase(user, {
+            userimage: result.secure_url,
+          });
+
+          setuserimage({uri: result.secure_url});
 
           await updateUser({
             photoURL: result.secure_url,
           });
-
-          console.log('Image Updated');
 
           setimguploaded(false);
           ToastAndroid.show('Profile Photo Updated !', ToastAndroid.SHORT);
