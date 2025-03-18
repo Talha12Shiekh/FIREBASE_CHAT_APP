@@ -49,7 +49,7 @@ const ProfileImageShowModal = ({
   return (
     <>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         visible={modalvisible}
         onRequestClose={() => setmodalvisible(false)}>
@@ -114,6 +114,5 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,.2)',
   },
 });

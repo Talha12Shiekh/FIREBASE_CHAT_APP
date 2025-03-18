@@ -85,3 +85,9 @@ const ChatRoom = ({route}: {route: ChatRoomProps}) => {
 };
 
 export default ChatRoom;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

@@ -10,7 +10,6 @@ import {MenuProvider} from 'react-native-popup-menu';
 import ChatRoom from './Screens/ChatRoom';
 import Profile from './Screens/Profile';
 import ProfileImageViewScreen from './Screens/ProfileImageViewScreen';
-import {ImageSourcePropType} from 'react-native';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -21,7 +20,7 @@ export type RootStackParamList = {
   Profile: undefined;
   ProfileImageView: {
     title: string;
-    profileimage: ImageSourcePropType | undefined;
+    profileimage: string;
     imageexists: boolean;
   };
 };

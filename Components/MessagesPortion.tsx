@@ -1,5 +1,5 @@
 import {Keyboard, ScrollView, StyleSheet, View} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {MessageType} from './SendMessageInput';
 import MessageItem from './MessageItem';
@@ -24,7 +24,10 @@ const MessagesPortion = ({messages}: {messages: MessageType[]}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView ref={messagesViewRef} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        ref={messagesViewRef}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{padding: wp(4)}}>
         {messages.map(msg => (
           <MessageItem message={msg} key={msg.createdAt.seconds} />
         ))}
@@ -38,6 +41,5 @@ export default MessagesPortion;
 const styles = StyleSheet.create({
   container: {
     flex: 9,
-    paddingVertical: wp(4),
   },
 });
