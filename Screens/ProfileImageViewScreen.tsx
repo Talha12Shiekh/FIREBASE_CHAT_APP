@@ -12,7 +12,13 @@ const ProfileImageViewScreen = ({
   return (
     <View style={styles.container}>
       {imageexists ? (
-        <Image resizeMode="cover" source={profileimage} style={styles.image} />
+        <View style={styles.imagecontainer}>
+          <Image
+            resizeMode="cover"
+            source={profileimage}
+            style={styles.image}
+          />
+        </View>
       ) : (
         <Text style={styles.text}>No Profile Photo</Text>
       )}
@@ -24,8 +30,13 @@ export default ProfileImageViewScreen;
 
 const styles = StyleSheet.create({
   image: {
+    height: '100%',
+    width: '100%',
+  },
+  imagecontainer: {
     height: '50%',
     width: '100%',
+    backgroundColor: 'red',
   },
   container: {
     flex: 1,

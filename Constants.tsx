@@ -34,3 +34,36 @@ export const formatDate = (date: Date) => {
 
   return currentDate + ' ' + currentMonth;
 };
+
+export const ReactionItems = [
+  {
+    id: 0,
+    emoji: '👍🏻',
+    title: 'like',
+  },
+  {
+    id: 1,
+    emoji: '❤️',
+    title: 'love',
+  },
+  {
+    id: 2,
+    emoji: '😢',
+    title: 'sad',
+  },
+  {
+    id: 3,
+    emoji: '😂',
+    title: 'laugh',
+  },
+  {
+    id: 4,
+    emoji: '😮',
+    title: 'shock',
+  },
+  {
+    id: 5,
+    emoji: '🙏',
+    title: 'apologize',
+  },
+];
