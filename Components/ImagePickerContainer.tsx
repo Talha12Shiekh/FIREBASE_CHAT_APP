@@ -1,4 +1,9 @@
-import {Animated, ImageSourcePropType, Keyboard} from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  ImageSourcePropType,
+  Keyboard,
+} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import ImagePicker from './ImagePicker';
 import {styles} from '../styles';
@@ -23,18 +28,20 @@ const ImagePickerContainer = ({
   const imagePickerOpacity = useRef(new Animated.Value(1)).current;
   const [userimage, setuserimage] = useState<Userimage | null>(null);
 
+  const {height} = Dimensions.get('screen');
+
   useEffect(() => {
     const keyboardShowListener = Keyboard.addListener('keyboardDidShow', () => {
       setisKeyboardVisible(true);
       Animated.parallel([
         Animated.timing(imagePickerTranslateY, {
-          toValue: -wp(40), // Move the ImagePicker up off-screen
-          duration: 300,
+          toValue: -height, // Move the ImagePicker up off-screen
+          duration: 1000,
           useNativeDriver: true, // Smooth animations
         }),
         Animated.timing(imagePickerOpacity, {
           toValue: 0, // Fade out
-          duration: 300,
+          duration: 1000,
           useNativeDriver: true,
         }),
       ]).start();
@@ -45,12 +52,12 @@ const ImagePickerContainer = ({
       Animated.parallel([
         Animated.timing(imagePickerTranslateY, {
           toValue: 0, // Bring the ImagePicker back to its original position
-          duration: 300,
+          duration: 1000,
           useNativeDriver: true,
         }),
         Animated.timing(imagePickerOpacity, {
           toValue: 1, // Fade in
-          duration: 300,
+          duration: 1000,
           useNativeDriver: true,
         }),
       ]).start();

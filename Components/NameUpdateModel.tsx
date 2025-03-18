@@ -71,8 +71,8 @@ export default NameUpdateModel;
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   modalView: {
     backgroundColor: 'white',
@@ -85,10 +85,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: wp(80),
+    width: wp(90),
     height: hp(20),
     padding: wp(5),
     justifyContent: 'space-between',
+    marginBottom: wp(2),
   },
   modaltext: {
     color: 'black',

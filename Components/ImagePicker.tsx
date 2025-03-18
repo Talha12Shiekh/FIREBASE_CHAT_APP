@@ -92,7 +92,10 @@ const ImagePicker = ({
 
       const result = await uploadResponse.json();
       if (result.secure_url) {
-        if (!isProfileScreen) setuserimage({uri: result.secure_url});
+        if (!isProfileScreen) {
+          setimguploaded(false);
+          setuserimage({uri: result.secure_url});
+        }
 
         setimageofuser(result.secure_url);
 

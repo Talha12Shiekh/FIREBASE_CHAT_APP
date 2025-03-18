@@ -6,7 +6,10 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import SendIcon from 'react-native-vector-icons/Feather';
 import {getRoomId} from '../Constants';
 import {useAuth} from '../Context/AuthContext';
@@ -106,10 +109,12 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     paddingTop: wp(3),
     paddingRight: wp(5),
+    maxHeight: heightPercentageToDP(30),
   },
   sendiconcontainer: {
     position: 'absolute',
     right: 20,
+    bottom: 7,
   },
   sendicon: {
     width: wp(9),
