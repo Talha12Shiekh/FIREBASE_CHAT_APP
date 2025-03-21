@@ -1,6 +1,11 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+import {WEB_CLIENT_ID} from '../Constants';
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -40,6 +45,7 @@ interface ContextProviderProps {
     loggeduser: FirebaseAuthTypes.User | null,
     updateObject: {userimage?: string; username?: string},
   ) => Promise<void>;
+  handleGoggleSignin: () => Promise<void>;
 }
 
 export const AuthContext = createContext<ContextProviderProps | null>(null);
@@ -48,6 +54,10 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
   const [user, setuser] = useState<FirebaseAuthTypes.User | null>(null);
   const [userAuthenticated, setuserAuthenticated] = useState(false);
   const [imageofuser, setimageofuser] = useState('');
+
+  GoogleSignin.configure({
+    webClientId: WEB_CLIENT_ID,
+  });
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(usr => {
@@ -191,6 +201,37 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     }
   }
 
+  const handleGoggleSignin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+
+      await GoogleSignin.signIn();
+
+      const getToken = await GoogleSignin.getTokens();
+
+      const googleCredential = auth.GoogleAuthProvider.credential(
+        getToken.idToken,
+      );
+
+      let user = await auth().signInWithCredential(googleCredential);
+
+      console.log(user);
+    } catch (error) {
+      const firebaseerror = error as FirebaseAuthTypes.NativeFirebaseAuthError;
+      if (firebaseerror.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('User cancelled the sign-in.');
+      } else if (firebaseerror.code === statusCodes.IN_PROGRESS) {
+        console.log('Sign-in is in progress.');
+      } else if (
+        firebaseerror.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
+      ) {
+        console.log('Play Services not available.');
+      } else {
+        console.log('Unknown Error:', firebaseerror);
+      }
+    }
+  };
+
   const contextreturnvalue: ContextProviderProps = {
     user,
     userAuthenticated,
@@ -202,6 +243,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     setuser,
     updateUser,
     handleUpdateUserInFirebase,
+    handleGoggleSignin,
   };
 
   return (

@@ -34,3 +34,6 @@ export const formatDate = (date: Date) => {
 
   return currentDate + ' ' + currentMonth;
 };
+
+export const WEB_CLIENT_ID =
+  '63474277737-rt0n69iisuu1o2e0h7q5nvdcraplq86r.apps.googleusercontent.com';

@@ -97,4 +97,29 @@ export const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     color: 'grey',
   },
+  ggleicn: {
+    width: wp(5),
+    height: hp(5),
+    margin: 0,
+  },
+  singlebtn: {
+    width: '95%',
+    backgroundColor: BTN_COLOR,
+    padding: wp(2.5),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    alignSelf: 'center',
+    flexDirection: 'row',
+  },
+  btntext: {
+    fontFamily: 'Poppins-Regular',
+    color: 'white',
+    fontSize: wp(4),
+  },
+  ortext: {
+    fontFamily: 'Poppins-Regular',
+    textAlign: 'center',
+    marginVertical: wp(2),
+  },
 });

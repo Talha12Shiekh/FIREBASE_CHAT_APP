@@ -12,7 +12,20 @@
           "package_name": "com.learning_firebase_real_time_messaging"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "63474277737-gre1d3ps3k5kjfm190btub8aeraq9of2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learning_firebase_real_time_messaging",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "63474277737-rt0n69iisuu1o2e0h7q5nvdcraplq86r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDZm7HtXCgJ65i2lxQ8Z5SnDSEvUdu-hJE"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63474277737-rt0n69iisuu1o2e0h7q5nvdcraplq86r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

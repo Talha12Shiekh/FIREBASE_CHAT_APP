@@ -22,6 +22,9 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../App';
 import {BTN_COLOR} from '../Constants';
+import {Image} from 'react-native';
+import GoggleIcon from '../assets/images/googleIcon.png';
+import {useAuth} from '../Context/AuthContext';
 
 interface ImageAndInputScreenPropsTypes {
   toptext: string;
@@ -130,6 +133,8 @@ const ImageAndInputScreen = ({
 
   const {email, password, name} = credentials;
 
+  const {handleGoggleSignin} = useAuth();
+
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
@@ -208,6 +213,30 @@ const ImageAndInputScreen = ({
                   onPress={() => navigation.navigate('SignUp')}
                   screentonavigate="Sign Up"
                 />
+              )}
+              {route.name == 'SignUp' && <Text style={styles.ortext}>OR</Text>}
+              {route.name == 'SignUp' && (
+                <TouchableOpacity onPress={handleGoggleSignin}>
+                  <View
+                    style={[
+                      styles.singlebtn,
+                      {
+                        backgroundColor: 'white',
+                        borderWidth: 1,
+                        gap: 10,
+                        padding: 0,
+                      },
+                    ]}>
+                    <Image
+                      source={GoggleIcon}
+                      style={styles.ggleicn}
+                      resizeMode="contain"
+                    />
+                    <Text style={[styles.btntext, {color: 'black'}]}>
+                      Sign In with google
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               )}
             </View>
           </View>
