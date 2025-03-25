@@ -6,6 +6,7 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {WEB_CLIENT_ID} from '../Constants';
+import {ToastAndroid} from 'react-native';
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -49,6 +50,8 @@ interface ContextProviderProps {
 }
 
 export const AuthContext = createContext<ContextProviderProps | null>(null);
+
+// {"additionalUserInfo": {"isNewUser": false, "profile": {"aud": "63474277737-rt0n69iisuu1o2e0h7q5nvdcraplq86r.apps.googleusercontent.com", "azp": "63474277737-gre1d3ps3k5kjfm190btub8aeraq9of2.apps.googleusercontent.com", "email": "tk.shiekh4567@gmail.com", "email_verified": true, "exp": 1742903546, "family_name": "Shiekh", "given_name": "Talha", "iat": 1742899946, "iss": "https://accounts.google.com", "name": "Talha Shiekh", "picture": "https://lh3.googleusercontent.com/a/ACg8ocI6GHOBmFUFEvDxZmkWYuveUUWmG5WQV808sGxHx7jgNTu-LnM=s96-c", "sub": "105463833198282569092"}, "providerId": "google.com"}, "user": {"displayName": "Talha Shiekh", "email": "tk.shiekh4567@gmail.com", "emailVerified": true, "isAnonymous": false, "metadata": [Object], "multiFactor": [Object], "phoneNumber": null, "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocI6GHOBmFUFEvDxZmkWYuveUUWmG5WQV808sGxHx7jgNTu-LnM=s96-c", "providerData": [Array], "providerId": "firebase", "tenantId": null, "uid": "ErcdQl3XYAWWK0v8HmBbzMFsDn13"}}
 
 export const AuthContextProvider = ({children}: AuthContextProps) => {
   const [user, setuser] = useState<FirebaseAuthTypes.User | null>(null);
@@ -95,6 +98,8 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
   const logout = async () => {
     try {
       await auth().signOut();
+      await GoogleSignin.signOut();
+      ToastAndroid.show('User Signed Out!', ToastAndroid.LONG);
 
       return {
         success: true,
@@ -213,9 +218,15 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
         getToken.idToken,
       );
 
-      let user = await auth().signInWithCredential(googleCredential);
+      let {user} = await auth().signInWithCredential(googleCredential);
 
       console.log(user);
+
+      await firestore().collection('Users').add({
+        username: user.displayName,
+        userimage: user.photoURL,
+        userId: user.uid,
+      });
     } catch (error) {
       const firebaseerror = error as FirebaseAuthTypes.NativeFirebaseAuthError;
       if (firebaseerror.code === statusCodes.SIGN_IN_CANCELLED) {
