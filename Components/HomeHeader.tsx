@@ -1,5 +1,5 @@
 import {Alert, Image, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {TOP_BAR_COLOR} from '../Constants';
 import {
@@ -48,17 +48,20 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 const HomeHeader = () => {
-  const {logout, user, setuser, updateUser} = useAuth();
+  const {logout, user, updateUser, getUserFromStorage} = useAuth();
 
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const [userData, setUserData] = useState<UserDataType | null>(null);
+
+  const isFetching = useRef(false);
 
   useEffect(() => {
     if (!user?.uid) return;
 
     try {
       const fetchUser = async () => {
+        isFetching.current = true;
         const querysnapshot = await firestore()
           .collection('Users')
           .where('userId', '==', user?.uid)
@@ -70,8 +73,42 @@ const HomeHeader = () => {
         });
       };
 
-      fetchUser();
+      const getStoredUser = async () => {
+        console.log('storing User');
+        if (isFetching.current) return; // checking if the program has gone through fetchUser function if it has then do not execute this function
 
+        console.log('going to stored user');
+        const storedUser = await getUserFromStorage();
+        console.log(storedUser);
+
+        console.log('stored user');
+
+        let storedUserData = {
+          username: storedUser?.displayName,
+          userimage: storedUser?.photoURL,
+          userId: storedUser?.uid,
+        } as UserDataType;
+
+        if (storedUser) {
+          console.log('Stored User <--------------->');
+          console.log(storedUser);
+          console.log('Stored User <--------------->');
+          setUserData(storedUserData);
+        } else {
+          console.log('Fetching user');
+          await fetchUser();
+        }
+      };
+
+      getStoredUser();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!userData) return;
+    try {
       async function handleUpdateUser() {
         await updateUser({
           displayName: userData?.username,
@@ -83,7 +120,7 @@ const HomeHeader = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [user]);
+  }, [userData]);
 
   async function handleLogout() {
     await logout();

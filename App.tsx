@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {AuthContextProvider, useAuth} from './Context/AuthContext';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -46,7 +46,25 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppContent = () => {
-  const {userAuthenticated} = useAuth();
+  const {userAuthenticated, getUserFromStorage, setuserAuthenticated} =
+    useAuth();
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const storedUser = await getUserFromStorage();
+
+        if (storedUser) {
+          setuserAuthenticated(true);
+        } else {
+          setuserAuthenticated(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getUser();
+  }, []);
 
   if (userAuthenticated) {
     return (

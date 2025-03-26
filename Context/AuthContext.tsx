@@ -7,6 +7,8 @@ import {
 } from '@react-native-google-signin/google-signin';
 import {WEB_CLIENT_ID} from '../Constants';
 import {ToastAndroid} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {UserDataType} from '../Screens/Home';
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -20,8 +22,6 @@ interface PromiseRejectResponse {
   success: boolean;
   message?: string;
 }
-
-//! PENDING IMAGE PICKER FIX IN SIGN UP SCREEN AND ALSO SHOW LOADING IMAGE WHEN THE USER PICKED THE IMAGE
 
 type PromiseResponse = PromiseSuccessResponse | PromiseRejectResponse;
 
@@ -47,6 +47,8 @@ interface ContextProviderProps {
     updateObject: {userimage?: string; username?: string},
   ) => Promise<void>;
   handleGoggleSignin: () => Promise<void>;
+  getUserFromStorage: () => Promise<FirebaseAuthTypes.User | null>;
+  setuserAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AuthContext = createContext<ContextProviderProps | null>(null);
@@ -76,9 +78,35 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     return unsubscribe;
   }, []);
 
+  async function saveUserToStorage(user: UserDataType) {
+    try {
+      await AsyncStorage.setItem('USER', JSON.stringify(user));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getUserFromStorage = async () => {
+    try {
+      const storageUser = await AsyncStorage.getItem('USER');
+      return storageUser ? JSON.parse(storageUser) : null;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const login = async (email: string, password: string) => {
     try {
       const response = await auth().signInWithEmailAndPassword(email, password);
+
+      const registeredUser = await firestore()
+        .collection('Users')
+        .where('userId', '==', response.user.uid)
+        .get();
+
+      if (registeredUser.docs[0].exists) {
+        await saveUserToStorage(registeredUser.docs[0].data);
+      }
 
       return {success: true, data: response?.user};
     } catch (error) {
@@ -100,7 +128,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
       await auth().signOut();
       await GoogleSignin.signOut();
       ToastAndroid.show('User Signed Out!', ToastAndroid.LONG);
-
+      await AsyncStorage.clear();
       return {
         success: true,
       };
@@ -126,6 +154,17 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
         userimage: imageofuser,
         userId: response?.user.uid,
       });
+
+      const registeredUser = await firestore()
+        .collection('Users')
+        .where('userId', '==', response.user.uid)
+        .get();
+
+      console.log('Registered User <--------------->');
+      if (registeredUser.docs[0].exists) {
+        await saveUserToStorage(registeredUser.docs[0].data);
+      }
+      console.log('Registered User <--------------->');
 
       setimageofuser('');
 
@@ -220,13 +259,25 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
 
       let {user} = await auth().signInWithCredential(googleCredential);
 
-      console.log(user);
+      const alreadyUser = await firestore()
+        .collection('Users')
+        .where('userId', '==', user.uid)
+        .get(); // checking that if the user who is signing in already exists
 
-      await firestore().collection('Users').add({
-        username: user.displayName,
-        userimage: user.photoURL,
-        userId: user.uid,
-      });
+      if (alreadyUser.empty) {
+        // checking that the user is empty meaning that it not already exists
+
+        // checking if the user already exists
+        await firestore().collection('Users').add({
+          username: user.displayName,
+          userimage: user.photoURL,
+          userId: user.uid,
+        });
+
+        if (alreadyUser.docs[0].exists) {
+          await saveUserToStorage(alreadyUser.docs[0].data);
+        }
+      }
     } catch (error) {
       const firebaseerror = error as FirebaseAuthTypes.NativeFirebaseAuthError;
       if (firebaseerror.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -255,6 +306,8 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
     updateUser,
     handleUpdateUserInFirebase,
     handleGoggleSignin,
+    getUserFromStorage,
+    setuserAuthenticated,
   };
 
   return (
