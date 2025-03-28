@@ -25,23 +25,11 @@ export type RootStackParamList = {
   };
 };
 
-// Talha shiekh
-// tk.shiekh4567@gmail.com
-// tkshk123
-
-// Talha2
-// tshiekh119@gmail.com
-// Talha2
-
-// User1
-// user1@gmail.com
-// user123
-
-//Sigma man
-// wrestlingempire707@gmail.coms
-// sigma123
-
 //https://www.figma.com/design/QP6EMSkbS7c1L1d9BPIdI1/Empty-State-Illustrations-Freebies-%E2%AD%90-(Community)?node-id=1-440&t=we4kgQRXjvsilI6s-0
+
+// Fun
+// Fun@gmail.com
+// fun123
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

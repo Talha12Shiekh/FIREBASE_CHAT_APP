@@ -79,9 +79,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.learning_firebase_real_time_messaging"
+    namespace "com.TK_CHAT"
     defaultConfig {
-        applicationId "com.learning_firebase_real_time_messaging"
+        applicationId "com.TK_CHAT"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

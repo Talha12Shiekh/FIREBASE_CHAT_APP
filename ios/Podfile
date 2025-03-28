@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'Learning_Firebase_Real_Time_Messaging' do
+target 'TK_CHAT' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,7 +23,7 @@ target 'Learning_Firebase_Real_Time_Messaging' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'Learning_Firebase_Real_Time_MessagingTests' do
+  target 'TK_CHATTests' do
     inherit! :complete
     # Pods for testing
   end

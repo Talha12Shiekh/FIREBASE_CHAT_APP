@@ -1,4 +1,4 @@
-package com.learning_firebase_real_time_messaging
+package com.TK_CHAT
 
 import android.app.Application
 import com.facebook.react.PackageList

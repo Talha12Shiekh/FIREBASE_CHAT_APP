@@ -57,7 +57,7 @@ const HomeHeader = () => {
   const isFetching = useRef(false);
 
   useEffect(() => {
-    if (!user?.uid) return;
+    if (!user?.uid || isFetching.current) return;
 
     try {
       const fetchUser = async () => {
@@ -74,14 +74,9 @@ const HomeHeader = () => {
       };
 
       const getStoredUser = async () => {
-        console.log('storing User');
         if (isFetching.current) return; // checking if the program has gone through fetchUser function if it has then do not execute this function
 
-        console.log('going to stored user');
         const storedUser = await getUserFromStorage();
-        console.log(storedUser);
-
-        console.log('stored user');
 
         let storedUserData = {
           username: storedUser?.displayName,
@@ -90,12 +85,9 @@ const HomeHeader = () => {
         } as UserDataType;
 
         if (storedUser) {
-          console.log('Stored User <--------------->');
-          console.log(storedUser);
-          console.log('Stored User <--------------->');
           setUserData(storedUserData);
+          isFetching.current = true;
         } else {
-          console.log('Fetching user');
           await fetchUser();
         }
       };

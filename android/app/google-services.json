@@ -7,6 +7,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:63474277737:android:7acbc3809d3e1e20d371f8",
+        "android_client_info": {
+          "package_name": "com.TK_CHAT"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63474277737-kd05slhksfmml1p0737jp6r51fdc7k2k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.TK_CHAT",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "63474277737-rt0n69iisuu1o2e0h7q5nvdcraplq86r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZm7HtXCgJ65i2lxQ8Z5SnDSEvUdu-hJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63474277737-rt0n69iisuu1o2e0h7q5nvdcraplq86r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:63474277737:android:63e106d503d0df21d371f8",
         "android_client_info": {
           "package_name": "com.learning_firebase_real_time_messaging"

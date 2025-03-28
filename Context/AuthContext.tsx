@@ -105,7 +105,7 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
         .get();
 
       if (registeredUser.docs[0].exists) {
-        await saveUserToStorage(registeredUser.docs[0].data);
+        await saveUserToStorage(registeredUser.docs[0].data() as UserDataType);
       }
 
       return {success: true, data: response?.user};
@@ -160,11 +160,9 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
         .where('userId', '==', response.user.uid)
         .get();
 
-      console.log('Registered User <--------------->');
       if (registeredUser.docs[0].exists) {
-        await saveUserToStorage(registeredUser.docs[0].data);
+        await saveUserToStorage(registeredUser.docs[0].data() as UserDataType);
       }
-      console.log('Registered User <--------------->');
 
       setimageofuser('');
 
@@ -273,10 +271,9 @@ export const AuthContextProvider = ({children}: AuthContextProps) => {
           userimage: user.photoURL,
           userId: user.uid,
         });
-
-        if (alreadyUser.docs[0].exists) {
-          await saveUserToStorage(alreadyUser.docs[0].data);
-        }
+      }
+      if (alreadyUser.docs[0].exists) {
+        await saveUserToStorage(alreadyUser.docs[0].data() as UserDataType);
       }
     } catch (error) {
       const firebaseerror = error as FirebaseAuthTypes.NativeFirebaseAuthError;

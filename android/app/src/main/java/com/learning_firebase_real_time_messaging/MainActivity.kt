@@ -1,4 +1,4 @@
-package com.learning_firebase_real_time_messaging
+package com.TK_CHAT
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -11,7 +11,7 @@ class MainActivity : ReactActivity() {
    * Returns the name of the main component registered from JavaScript. This is used to schedule
    * rendering of the component.
    */
-  override fun getMainComponentName(): String = "Learning_Firebase_Real_Time_Messaging"
+  override fun getMainComponentName(): String = "TK_CHAT"
 
   /**
    * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]
