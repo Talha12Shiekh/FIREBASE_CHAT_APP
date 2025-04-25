@@ -1,3 +1,16 @@
+import * as functions from 'firebase-functions';
+import admin from 'firebase-admin';
+admin.initializeApp();
+
+functions.firestore.onDocumentCreated(
+  'Rooms/{roomId}/Messages/{messageId}',
+  event => {
+    // event.data?.data();
+  },
+);
+
+// exports.sendChatsNotifications = functions
+
 export const BG_COLOR = 'white';
 export const BTN_COLOR = '#4c4dc7';
 export const INPUT_BG_COLOR = '#f3f3f3';

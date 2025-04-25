@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   heightPercentageToDP,
   widthPercentageToDP as wp,
@@ -15,6 +15,8 @@ import {getRoomId} from '../Constants';
 import {useAuth} from '../Context/AuthContext';
 import firestore, {Timestamp} from '@react-native-firebase/firestore';
 import {UserDataType} from '../Screens/Home';
+import {PermissionsAndroid} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 
 export interface MessageType {
   userId: string;
@@ -30,7 +32,18 @@ export interface MessageType {
 const SendMessageInput = ({currentuser}: {currentuser: UserDataType}) => {
   const [singlemessage, setsinglemessage] = useState('');
 
+  PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
   const {user} = useAuth();
+
+  async function getToken() {
+    const token = await messaging().getToken();
+    console.log(token);
+  }
+
+  useEffect(() => {
+    getToken();
+  }, []);
 
   async function handleSendMessage() {
     let message = singlemessage.trim();
